@@ -362,6 +362,7 @@ class FlutterMaxAd {
     adjustAdRevenue.adRevenueUnit=ad.adUnitId;
     adjustAdRevenue.adRevenuePlacement=ad.placement;
     Adjust.trackAdRevenueNew(adjustAdRevenue);
+    _loadAdListener?.onAdRevenuePaidCallback.call(ad,_getMaxInfoById(ad.adUnitId));
   }
 
   printDebug(Object? object){
