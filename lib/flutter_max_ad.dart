@@ -1,3 +1,6 @@
+import 'package:adjust_sdk/adjust.dart';
+import 'package:adjust_sdk/adjust_ad_revenue.dart';
+import 'package:adjust_sdk/adjust_config.dart';
 import 'package:applovin_max/applovin_max.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_max_ad/ad/ad_location_key.dart';
@@ -132,6 +135,9 @@ class FlutterMaxAd {
               _fullAdShowing=false;
               loadAdByType(AdType.open);
               _adShowListener?.onAdHidden.call(ad);
+            },
+            onAdRevenuePaidCallback: (MaxAd ad){
+              _onAdRevenuePaidByAdjust(ad);
             }
         )
     );
@@ -174,6 +180,9 @@ class FlutterMaxAd {
           onAdReceivedRewardCallback: (MaxAd ad, MaxReward reward) {
             _adShowListener?.onAdReceivedReward?.call(ad,reward);
           },
+          onAdRevenuePaidCallback: (MaxAd ad){
+            _onAdRevenuePaidByAdjust(ad);
+          }
         )
     );
     AppLovinMAX.setInterstitialListener(
@@ -211,6 +220,9 @@ class FlutterMaxAd {
             loadAdByType(AdType.inter);
             _adShowListener?.onAdHidden.call(ad);
           },
+          onAdRevenuePaidCallback: (MaxAd ad){
+            _onAdRevenuePaidByAdjust(ad);
+          }
         )
     );
   }
@@ -341,6 +353,15 @@ class FlutterMaxAd {
 
   startLoadAdCallBack(){
     _loadAdListener?.startLoad.call();
+  }
+
+  _onAdRevenuePaidByAdjust(MaxAd ad){
+    var adjustAdRevenue = AdjustAdRevenue(AdjustConfig.AdRevenueSourceAppLovinMAX,);
+    adjustAdRevenue.setRevenue(ad.revenue, "USD");
+    adjustAdRevenue.adRevenueNetwork=ad.networkName;
+    adjustAdRevenue.adRevenueUnit=ad.adUnitId;
+    adjustAdRevenue.adRevenuePlacement=ad.placement;
+    Adjust.trackAdRevenueNew(adjustAdRevenue);
   }
 
   printDebug(Object? object){

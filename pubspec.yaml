@@ -13,6 +13,7 @@ dependencies:
   plugin_platform_interface: ^2.0.2
   get_storage: 2.1.1
   applovin_max: 3.8.0
+  adjust_sdk: 4.31.0
 
 dev_dependencies:
   flutter_test:
