@@ -120,7 +120,7 @@ class FlutterMaxAd {
               _fullAdShowing=true;
               AdNumUtils.instance.updateShowNum();
               _removeMaxAd(ad.adUnitId);
-              _adShowListener?.showAdSuccess.call(ad,_getMaxInfoById(ad.adUnitId));
+              _adShowListener?.showAdSuccess.call(ad);
             },
             onAdDisplayFailedCallback: (MaxAd ad, MaxError error) {
               printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
@@ -161,7 +161,7 @@ class FlutterMaxAd {
             _fullAdShowing=true;
             _removeMaxAd(ad.adUnitId);
             AdNumUtils.instance.updateShowNum();
-            _adShowListener?.showAdSuccess.call(ad,_getMaxInfoById(ad.adUnitId));
+            _adShowListener?.showAdSuccess.call(ad);
           },
           onAdDisplayFailedCallback: (MaxAd ad, MaxError error) {
             printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
@@ -205,7 +205,7 @@ class FlutterMaxAd {
             _fullAdShowing=true;
             _removeMaxAd(ad.adUnitId);
             AdNumUtils.instance.updateShowNum();
-            _adShowListener?.showAdSuccess.call(ad,_getMaxInfoById(ad.adUnitId));
+            _adShowListener?.showAdSuccess.call(ad);
           },
           onAdDisplayFailedCallback: (ad, error) {
             printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
@@ -362,7 +362,7 @@ class FlutterMaxAd {
     adjustAdRevenue.adRevenueUnit=ad.adUnitId;
     adjustAdRevenue.adRevenuePlacement=ad.placement;
     Adjust.trackAdRevenueNew(adjustAdRevenue);
-    _loadAdListener?.onAdRevenuePaidCallback.call(ad,_getMaxInfoById(ad.adUnitId));
+    _adShowListener?.onAdRevenuePaidCallback.call(ad,_getMaxInfoById(ad.adUnitId));
   }
 
   printDebug(Object? object){
