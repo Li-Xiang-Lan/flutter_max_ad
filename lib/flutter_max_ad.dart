@@ -2,6 +2,7 @@ import 'package:adjust_sdk/adjust.dart';
 import 'package:adjust_sdk/adjust_ad_revenue.dart';
 import 'package:adjust_sdk/adjust_config.dart';
 import 'package:applovin_max/applovin_max.dart';
+import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_max_ad/ad/ad_location_key.dart';
 import 'package:flutter_max_ad/ad/ad_num_utils.dart';
@@ -23,6 +24,7 @@ class FlutterMaxAd {
   final Map<String,BaseLoad> _loadAdMap={};
   AdShowListener? _adShowListener;
   LoadAdListener? _loadAdListener;
+  final _facebookAppEvents = FacebookAppEvents();
 
   initMax({
     required String maxKey,
@@ -72,7 +74,8 @@ class FlutterMaxAd {
     }
     switch(adType){
       case AdType.open:
-        _loadAdMap[AdLocationKey.open]?.loadAd(0);
+        _loadAdMap[AdLocationKey.firstOpen]?.loadAd(0);
+        _loadAdMap[AdLocationKey.secondOpen]?.loadAd(0);
         break;
       case AdType.reward:
         _loadAdMap[AdLocationKey.firstRewarded]?.loadAd(0);
@@ -89,7 +92,7 @@ class FlutterMaxAd {
   bool _getAdLoadingByType(AdType adType){
     switch(adType){
       case AdType.open:
-        return _loadAdMap[AdLocationKey.open]?.isLoading()??false;
+        return (_loadAdMap[AdLocationKey.firstOpen]?.isLoading()??false)||(_loadAdMap[AdLocationKey.secondOpen]?.isLoading()??false);
       case AdType.reward:
         return (_loadAdMap[AdLocationKey.firstRewarded]?.isLoading()??false)||(_loadAdMap[AdLocationKey.secondRewarded]?.isLoading()??false);
       case AdType.inter:
@@ -236,13 +239,15 @@ class FlutterMaxAd {
   setMaxAdInfo(MaxAdBean maxAdBean){
     printDebug("FlutterMaxAd max ad info--->${maxAdBean.toString()}");
     AdNumUtils.instance.setNumInfo(maxAdBean);
-    maxAdBean.openAdList.sort((a, b) => (b.sort).compareTo(a.sort));
+    maxAdBean.firstOpenAdList.sort((a, b) => (b.sort).compareTo(a.sort));
+    maxAdBean.secondOpenAdList.sort((a, b) => (b.sort).compareTo(a.sort));
     maxAdBean.firstRewardedAdList.sort((a, b) => (b.sort).compareTo(a.sort));
     maxAdBean.secondRewardedAdList.sort((a, b) => (b.sort).compareTo(a.sort));
     maxAdBean.firstInterAdList.sort((a, b) => (b.sort).compareTo(a.sort));
     maxAdBean.secondInterAdList.sort((a, b) => (b.sort).compareTo(a.sort));
 
-    _loadAdMap[AdLocationKey.open]=OpenAd(adInfoList: maxAdBean.openAdList);
+    _loadAdMap[AdLocationKey.firstOpen]=OpenAd(adInfoList: maxAdBean.firstOpenAdList);
+    _loadAdMap[AdLocationKey.secondOpen]=OpenAd(adInfoList: maxAdBean.secondOpenAdList);
     _loadAdMap[AdLocationKey.firstRewarded]=RewordedAd(adInfoList: maxAdBean.firstRewardedAdList);
     _loadAdMap[AdLocationKey.secondRewarded]=RewordedAd(adInfoList: maxAdBean.secondRewardedAdList);
     _loadAdMap[AdLocationKey.firstInter]=InterAd(adInfoList: maxAdBean.firstInterAdList);
@@ -252,7 +257,14 @@ class FlutterMaxAd {
   Future<MaxAd?> checkHasMaxAd(AdType adType)async{
     switch(adType){
       case AdType.open:
-        return _loadAdMap[AdLocationKey.open]?.getMaxAd();
+        var firstMaxAd = await _loadAdMap[AdLocationKey.firstOpen]?.getMaxAd();
+        if(null==firstMaxAd){
+          var secondMaxAd = await _loadAdMap[AdLocationKey.secondOpen]?.getMaxAd();
+          if(null!=secondMaxAd){
+            firstMaxAd=secondMaxAd;
+          }
+        }
+        return firstMaxAd;
       case AdType.reward:
         var firstMaxAd = await _loadAdMap[AdLocationKey.firstRewarded]?.getMaxAd();
         if(null==firstMaxAd){
@@ -297,7 +309,7 @@ class FlutterMaxAd {
       case AdType.open:
         var maxAd = await checkHasMaxAd(adType);
         if(null!=maxAd){
-          var openMaxAdType = _loadAdMap[AdLocationKey.open]?.getMaxInfoById(maxAd.adUnitId)?.adType;
+          var openMaxAdType = _loadAdMap[AdLocationKey.firstOpen]?.getMaxInfoById(maxAd.adUnitId)?.adType??(_loadAdMap[AdLocationKey.secondOpen]?.getMaxInfoById(maxAd.adUnitId)?.adType);
           if(openMaxAdType==AdType.open){
             printDebug("FlutterMaxAd start show open ad-->${maxAd.adUnitId}");
             AppLovinMAX.showAppOpenAd(maxAd.adUnitId);
@@ -362,6 +374,7 @@ class FlutterMaxAd {
     adjustAdRevenue.adRevenueUnit=ad.adUnitId;
     adjustAdRevenue.adRevenuePlacement=ad.placement;
     Adjust.trackAdRevenueNew(adjustAdRevenue);
+    _facebookAppEvents.logPurchase(amount: ad.revenue, currency: "USD");
     _adShowListener?.onAdRevenuePaidCallback.call(ad,_getMaxInfoById(ad.adUnitId));
   }
 
