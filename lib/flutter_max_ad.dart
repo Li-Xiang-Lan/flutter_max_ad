@@ -29,9 +29,11 @@ class FlutterMaxAd {
   initMax({
     required String maxKey,
     required MaxAdBean maxAdBean,
+    required bool buyUser,
     List? testDeviceAdvertisingIds,
     bool? showMediationDebugger,
   })async{
+    _isBuyUser=buyUser;
     setMaxAdInfo(maxAdBean);
     if(null!=testDeviceAdvertisingIds){
       AppLovinMAX.setTestDeviceAdvertisingIds(testDeviceAdvertisingIds);
