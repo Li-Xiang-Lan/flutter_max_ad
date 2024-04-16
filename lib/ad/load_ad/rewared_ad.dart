@@ -78,19 +78,20 @@ class RewordedAd extends BaseLoad{
   bool isLoading() => _loading;
 
   @override
-  Future<MaxAd?> getMaxAd() async{
-    if(null==_adResultBean){
-      FlutterMaxAd.instance.printDebug("FlutterMaxAd reward ad result is null");
-      loadAd(0);
-      return null;
-    }
-    var isRewardedAdReady=await AppLovinMAX.isRewardedAdReady(_adResultBean?.maxAd.adUnitId??"")??false;
-    if(isRewardedAdReady){
-      return _adResultBean?.maxAd;
-    }
-    _adResultBean=null;
-    loadAd(0);
-    return null;
+  MaxAd? getMaxAd() {
+    // if(null==_adResultBean){
+    //   FlutterMaxAd.instance.printDebug("FlutterMaxAd reward ad result is null");
+    //   loadAd(0);
+    //   return null;
+    // }
+    // var isRewardedAdReady=await AppLovinMAX.isRewardedAdReady(_adResultBean?.maxAd.adUnitId??"")??false;
+    // if(isRewardedAdReady){
+    //   return _adResultBean?.maxAd;
+    // }
+    // _adResultBean=null;
+    // loadAd(0);
+    // return null;
+    return _adResultBean?.maxAd;
   }
 
   @override

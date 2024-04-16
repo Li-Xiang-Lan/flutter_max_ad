@@ -7,7 +7,7 @@ abstract class BaseLoad{
   loadAd(int index);
   loadAdFail(String adUnitId);
   loadAdSuccess(MaxAd ad);
-  Future<MaxAd?> getMaxAd();
+  MaxAd? getMaxAd();
   MaxAdInfoBean? getMaxInfoById(String adUnitId);
   removeMaxAd(String adUnitId);
 }

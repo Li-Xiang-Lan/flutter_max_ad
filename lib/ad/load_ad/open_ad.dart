@@ -76,27 +76,31 @@ class OpenAd extends BaseLoad{
   @override
   bool isLoading() => _loading;
 
+  // @override
+  // Future<MaxAd?> getMaxAd() async{
+  //   if(null==_adResultBean){
+  //     return null;
+  //   }
+  //   var maxAdInfoBean = getMaxInfoById(_adResultBean?.maxAd.adUnitId??"");
+  //   if(null!=maxAdInfoBean){
+  //     if(maxAdInfoBean.adType==AdType.open){
+  //       var isAppOpenAdReady=await AppLovinMAX.isAppOpenAdReady(_adResultBean?.maxAd.adUnitId??"")??false;
+  //       if(isAppOpenAdReady){
+  //         return _adResultBean?.maxAd;
+  //       }
+  //     }else if(maxAdInfoBean.adType==AdType.inter){
+  //       var isInterstitialReady=await AppLovinMAX.isInterstitialReady(_adResultBean?.maxAd.adUnitId??"")??false;
+  //       if(isInterstitialReady){
+  //         return _adResultBean?.maxAd;
+  //       }
+  //     }
+  //   }
+  //   _adResultBean=null;
+  //   return null;
+  // }
   @override
-  Future<MaxAd?> getMaxAd() async{
-    if(null==_adResultBean){
-      return null;
-    }
-    var maxAdInfoBean = getMaxInfoById(_adResultBean?.maxAd.adUnitId??"");
-    if(null!=maxAdInfoBean){
-      if(maxAdInfoBean.adType==AdType.open){
-        var isAppOpenAdReady=await AppLovinMAX.isAppOpenAdReady(_adResultBean?.maxAd.adUnitId??"")??false;
-        if(isAppOpenAdReady){
-          return _adResultBean?.maxAd;
-        }
-      }else if(maxAdInfoBean.adType==AdType.inter){
-        var isInterstitialReady=await AppLovinMAX.isInterstitialReady(_adResultBean?.maxAd.adUnitId??"")??false;
-        if(isInterstitialReady){
-          return _adResultBean?.maxAd;
-        }
-      }
-    }
-    _adResultBean=null;
-    return null;
+  MaxAd? getMaxAd() {
+    return _adResultBean?.maxAd;
   }
 
   @override

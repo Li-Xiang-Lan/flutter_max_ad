@@ -77,20 +77,25 @@ class InterAd extends BaseLoad{
   @override
   bool isLoading() => _loading;
 
+  // @override
+  // Future<MaxAd?> getMaxAd() async{
+  //   if(null==_adResultBean){
+  //     FlutterMaxAd.instance.printDebug("FlutterMaxAd inter ad result is null");
+  //     loadAd(0);
+  //     return null;
+  //   }
+  //   var isInterstitialReady=await AppLovinMAX.isInterstitialReady(_adResultBean?.maxAd.adUnitId??"")??false;
+  //   if(isInterstitialReady){
+  //     return _adResultBean?.maxAd;
+  //   }
+  //   _adResultBean=null;
+  //   loadAd(0);
+  //   return null;
+  // }
+
   @override
-  Future<MaxAd?> getMaxAd() async{
-    if(null==_adResultBean){
-      FlutterMaxAd.instance.printDebug("FlutterMaxAd inter ad result is null");
-      loadAd(0);
-      return null;
-    }
-    var isInterstitialReady=await AppLovinMAX.isInterstitialReady(_adResultBean?.maxAd.adUnitId??"")??false;
-    if(isInterstitialReady){
-      return _adResultBean?.maxAd;
-    }
-    _adResultBean=null;
-    loadAd(0);
-    return null;
+  MaxAd? getMaxAd() {
+    return _adResultBean?.maxAd;
   }
 
   @override

@@ -248,30 +248,30 @@ class FlutterMaxAd {
     _loadAdMap[AdLocationKey.secondInter]=InterAd(adInfoList: maxAdBean.secondInterAdList);
   }
 
-  Future<MaxAd?> checkHasMaxAd(AdType adType)async{
+  MaxAd? checkHasMaxAd(AdType adType){
     switch(adType){
       case AdType.open:
-        var firstMaxAd = await _loadAdMap[AdLocationKey.firstOpen]?.getMaxAd();
+        var firstMaxAd = _loadAdMap[AdLocationKey.firstOpen]?.getMaxAd();
         if(null==firstMaxAd){
-          var secondMaxAd = await _loadAdMap[AdLocationKey.secondOpen]?.getMaxAd();
+          var secondMaxAd = _loadAdMap[AdLocationKey.secondOpen]?.getMaxAd();
           if(null!=secondMaxAd){
             firstMaxAd=secondMaxAd;
           }
         }
         return firstMaxAd;
       case AdType.reward:
-        var firstMaxAd = await _loadAdMap[AdLocationKey.firstRewarded]?.getMaxAd();
+        var firstMaxAd = _loadAdMap[AdLocationKey.firstRewarded]?.getMaxAd();
         if(null==firstMaxAd){
-          var secondMaxAd = await _loadAdMap[AdLocationKey.secondRewarded]?.getMaxAd();
+          var secondMaxAd = _loadAdMap[AdLocationKey.secondRewarded]?.getMaxAd();
           if(null!=secondMaxAd){
             firstMaxAd=secondMaxAd;
           }
         }
         return firstMaxAd;
       case AdType.inter:
-        var firstMaxAd = await _loadAdMap[AdLocationKey.firstInter]?.getMaxAd();
+        var firstMaxAd = _loadAdMap[AdLocationKey.firstInter]?.getMaxAd();
         if(null==firstMaxAd){
-          var secondMaxAd = await _loadAdMap[AdLocationKey.secondInter]?.getMaxAd();
+          var secondMaxAd = _loadAdMap[AdLocationKey.secondInter]?.getMaxAd();
           if(null!=secondMaxAd){
             firstMaxAd=secondMaxAd;
           }
@@ -295,17 +295,27 @@ class FlutterMaxAd {
       return;
     }
     _adShowListener=adShowListener;
+    var maxAd = checkHasMaxAd(adType);
     switch(adType){
       case AdType.open:
-        var maxAd = await checkHasMaxAd(adType);
         if(null!=maxAd){
           var openMaxAdType = _loadAdMap[AdLocationKey.firstOpen]?.getMaxInfoById(maxAd.adUnitId)?.adType??(_loadAdMap[AdLocationKey.secondOpen]?.getMaxInfoById(maxAd.adUnitId)?.adType);
           if(openMaxAdType==AdType.open){
             printDebug("FlutterMaxAd start show open ad-->${maxAd.adUnitId}");
-            AppLovinMAX.showAppOpenAd(maxAd.adUnitId);
+            if(await AppLovinMAX.isAppOpenAdReady(maxAd.adUnitId)==true){
+              AppLovinMAX.showAppOpenAd(maxAd.adUnitId);
+            }else{
+              printDebug("FlutterMaxAd isAppOpenAdReady=false");
+              _adShowListener?.showAdFail.call(null,null);
+            }
           }else if(openMaxAdType==AdType.inter){
             printDebug("FlutterMaxAd start show open ad-->${maxAd.adUnitId}");
-            AppLovinMAX.showInterstitial(maxAd.adUnitId);
+            if(await AppLovinMAX.isInterstitialReady(maxAd.adUnitId)==true){
+              AppLovinMAX.showInterstitial(maxAd.adUnitId);
+            }else{
+              printDebug("FlutterMaxAd isAppOpenAdReady=false");
+              _adShowListener?.showAdFail.call(null,null);
+            }
           }else{
             printDebug("FlutterMaxAd show open ad fail,open ad result type not match");
             _adShowListener?.showAdFail.call(null,null);
@@ -316,20 +326,28 @@ class FlutterMaxAd {
         }
         break;
       case AdType.reward:
-        var maxAd = await checkHasMaxAd(adType);
         if(null!=maxAd){
           printDebug("FlutterMaxAd start show reward ad-->${maxAd.adUnitId}");
-          AppLovinMAX.showRewardedAd(maxAd.adUnitId);
+          if(await AppLovinMAX.isRewardedAdReady(maxAd.adUnitId)==true){
+            AppLovinMAX.showRewardedAd(maxAd.adUnitId);
+          }else{
+            printDebug("FlutterMaxAd isRewardedAdReady=false");
+            _adShowListener?.showAdFail.call(null,null);
+          }
         }else{
           printDebug("FlutterMaxAd show reward ad fail,no reward result");
           _adShowListener?.showAdFail.call(null,null);
         }
         break;
       case AdType.inter:
-        var maxAd = await checkHasMaxAd(adType);
         if(null!=maxAd){
           printDebug("FlutterMaxAd start show inter ad-->${maxAd.adUnitId}");
-          AppLovinMAX.showInterstitial(maxAd.adUnitId);
+          if(await AppLovinMAX.isInterstitialReady(maxAd.adUnitId)==true){
+            AppLovinMAX.showInterstitial(maxAd.adUnitId);
+          }else{
+            printDebug("FlutterMaxAd isInterstitialReady=false");
+            _adShowListener?.showAdFail.call(null,null);
+          }
         }else{
           printDebug("FlutterMaxAd show inter ad fail,no inter result");
           _adShowListener?.showAdFail.call(null,null);
