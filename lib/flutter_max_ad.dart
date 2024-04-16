@@ -20,7 +20,7 @@ class FlutterMaxAd {
 
   static FlutterMaxAd get instance => _instance;
 
-  var _maxInit=false,_isBuyUser=false,_fullAdShowing=false;
+  var _maxInit=false,_fullAdShowing=false;
   final Map<String,BaseLoad> _loadAdMap={};
   AdShowListener? _adShowListener;
   LoadAdListener? _loadAdListener;
@@ -29,11 +29,9 @@ class FlutterMaxAd {
   initMax({
     required String maxKey,
     required MaxAdBean maxAdBean,
-    required bool buyUser,
     List? testDeviceAdvertisingIds,
     bool? showMediationDebugger,
   })async{
-    _isBuyUser=buyUser;
     setMaxAdInfo(maxAdBean);
     if(null!=testDeviceAdvertisingIds){
       AppLovinMAX.setTestDeviceAdvertisingIds(testDeviceAdvertisingIds);
@@ -46,11 +44,9 @@ class FlutterMaxAd {
       }
       _setAdListener();
       loadAdByType(AdType.open);
+      loadAdByType(AdType.reward);
+      loadAdByType(AdType.inter);
     }
-  }
-
-  setBuyUser(bool buyUser){
-    _isBuyUser=buyUser;
   }
 
   setLoadAdListener(LoadAdListener loadAdListener){
@@ -60,10 +56,6 @@ class FlutterMaxAd {
   loadAdByType(AdType adType)async{
     if(!_maxInit){
       printDebug("FlutterMaxAd not init");
-      return;
-    }
-    if(!_isBuyUser){
-      printDebug("FlutterMaxAd not buy user, can not load ad");
       return;
     }
     if(AdNumUtils.instance.getAdNumLimit()){
@@ -296,10 +288,6 @@ class FlutterMaxAd {
   })async{
     if(!_maxInit){
       printDebug("FlutterMaxAd not init");
-      return;
-    }
-    if(!_isBuyUser){
-      printDebug("FlutterMaxAd show ad fail, not buy user");
       return;
     }
     if(_fullAdShowing){
