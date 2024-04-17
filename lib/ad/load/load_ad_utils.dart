@@ -85,7 +85,7 @@ class LoadAdUtils{
   loadAdSuccess(MaxAd ad){
     var info = _getAdInfoById(ad.adUnitId);
     if(null!=info){
-      printDebug("FlutterMaxAd --->${info.adType} load success");
+      printDebug("FlutterMaxAd --->${info.adType}--->${ad.adUnitId}--->${info.id} load success");
       _loadingList.remove(info.adType);
       _resultMap[info.adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
     }
@@ -94,7 +94,7 @@ class LoadAdUtils{
   loadAdFail(String adUnitId){
     var info = _getAdInfoById(adUnitId);
     if(null!=info){
-      printDebug("FlutterMaxAd --->${info.adType} load fail");
+      printDebug("FlutterMaxAd --->${info.adType}--->$adUnitId--->${info.id} load fail");
       var nextAdInfo = getNextAdInfoById(adUnitId);
       if(null!=nextAdInfo){
         _loadAdByType(info.adType, nextAdInfo);
