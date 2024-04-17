@@ -154,13 +154,15 @@ class FlutterMaxAd {
           onAdDisplayedCallback: (ad) {
             printDebug("FlutterMaxAd show ad success---->${ad.adUnitId}");
             _fullAdShowing=true;
-            _removeMaxAd(AdType.inter);
+            var isOpen = LoadAdUtils.instance.checkIsOpenTypeById(ad.adUnitId)||LoadAdUtils2.instance.checkIsOpenTypeById(ad.adUnitId);
+            _removeMaxAd(isOpen?AdType.open:AdType.inter);
             AdNumUtils.instance.updateShowNum();
             _adShowListener?.showAdSuccess.call(ad);
           },
           onAdDisplayFailedCallback: (ad, error) {
             printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
-            _removeMaxAd(AdType.inter);
+            var isOpen = LoadAdUtils.instance.checkIsOpenTypeById(ad.adUnitId)||LoadAdUtils2.instance.checkIsOpenTypeById(ad.adUnitId);
+            _removeMaxAd(isOpen?AdType.open:AdType.inter);
             _adShowListener?.showAdFail.call(ad,error);
           },
           onAdClickedCallback: (ad) {
