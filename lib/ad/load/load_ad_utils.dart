@@ -22,7 +22,7 @@ class LoadAdUtils{
       printDebug("FlutterMaxAd --->$adType is loading");
       return;
     }
-    if(_checkHasCache(adType)){
+    if(checkHasCache(adType)){
       printDebug("FlutterMaxAd --->$adType has cache");
       return;
     }
@@ -59,7 +59,7 @@ class LoadAdUtils{
     }
   }
 
-  bool _checkHasCache(AdType adType){
+  bool checkHasCache(AdType adType){
     var bean = _resultMap[adType];
     if(null!=bean?.maxAd){
       var expired = DateTime.now().millisecondsSinceEpoch-(bean?.loadTime??0)>(bean?.maxAdInfoBean.expire??0)*1000;

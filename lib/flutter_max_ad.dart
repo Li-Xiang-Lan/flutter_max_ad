@@ -288,6 +288,14 @@ class FlutterMaxAd {
     return infoBean;
   }
 
+  bool checkHasCache(AdType adType){
+    var hasCache = LoadAdUtils.instance.checkHasCache(adType);
+    if(!hasCache){
+      return LoadAdUtils2.instance.checkHasCache(adType);
+    }
+    return true;
+  }
+
   printDebug(Object? object){
     if(kDebugMode){
       print(object);
