@@ -23,7 +23,7 @@ class MaxAdBean {
 
   @override
   String toString() {
-    return 'MaxAdBean{maxShowNum: $maxShowNum, maxClickNum: $maxClickNum, openAdList: $firstOpenAdList, firstRewardedAdList: $firstRewardedAdList, secondRewardedAdList: $secondRewardedAdList, firstInterAdList: $firstInterAdList, secondInterAdList: $secondInterAdList}';
+    return 'MaxAdBean{maxShowNum: $maxShowNum, maxClickNum: $maxClickNum, firstOpenAdList: $firstOpenAdList, secondOpenAdList: $secondOpenAdList, firstRewardedAdList: $firstRewardedAdList, secondRewardedAdList: $secondRewardedAdList, firstInterAdList: $firstInterAdList, secondInterAdList: $secondInterAdList}';
   }
 }
 
