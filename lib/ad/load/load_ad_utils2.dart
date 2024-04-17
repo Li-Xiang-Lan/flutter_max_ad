@@ -19,16 +19,16 @@ class LoadAdUtils2{
 
   loadAd(AdType adType){
     if(_loadingList.contains(adType)){
-      printDebug("FlutterMaxAd2 --->$adType is loading");
+      printDebug("FlutterMaxAd --->$adType is loading");
       return;
     }
     if(checkHasCache(adType)){
-      printDebug("FlutterMaxAd2 --->$adType has cache");
+      printDebug("FlutterMaxAd --->$adType has cache");
       return;
     }
     var list = _getAdListByType(adType);
     if(list.isEmpty){
-      printDebug("FlutterMaxAd2 --->$adType list is empty");
+      printDebug("FlutterMaxAd --->$adType list is empty");
       return;
     }
     _loadingList.add(adType);
@@ -36,7 +36,7 @@ class LoadAdUtils2{
   }
 
   _loadAdByType(AdType adType,MaxAdInfoBean bean){
-    printDebug("FlutterMaxAd2 --->start load $adType ad,data=${bean.toString()}");
+    printDebug("FlutterMaxAd --->start load $adType ad,data=${bean.toString()}");
     switch(adType){
       case AdType.open:
         if(bean.adType==AdType.open){
@@ -85,26 +85,30 @@ class LoadAdUtils2{
   loadAdSuccess(MaxAd ad){
     var info = getAdInfoById(ad.adUnitId);
     if(null!=info){
-      printDebug("FlutterMaxAd2 --->${info.adType}--->${ad.adUnitId}--->${info.id} load success");
-      _loadingList.remove(info.adType);
-      _resultMap[info.adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
+      var adType = checkIsOpenTypeById(ad.adUnitId)?AdType.open:info.adType;
+      printDebug("FlutterMaxAd --->$adType--->${ad.adUnitId}--->${info.id} load success");
+      _loadingList.remove(adType);
+      _resultMap[adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
     }
   }
 
   loadAdFail(String adUnitId){
     var info = getAdInfoById(adUnitId);
     if(null!=info){
-      printDebug("FlutterMaxAd2 --->${info.adType}--->$adUnitId--->${info.id} load fail");
+      var adType = checkIsOpenTypeById(adUnitId)?AdType.open:info.adType;
+      printDebug("FlutterMaxAd --->$adType--->$adUnitId--->${info.id} load fail");
       var nextAdInfo = _getNextAdInfoById(adUnitId);
       if(null!=nextAdInfo){
-        _loadAdByType(info.adType, nextAdInfo);
+        _loadAdByType(adType, nextAdInfo);
       }else{
-        _loadingList.remove(info.adType);
+        _loadingList.remove(adType);
       }
     }
   }
 
   MaxAdResultBean? getAdResultByAdType(AdType adType)=>_resultMap[adType];
+
+  bool checkIsOpenTypeById(String id)=>_maxAdBean.secondOpenAdList.indexWhere((element) => element.id==id)>=0;
 
   MaxAdInfoBean? getAdInfoById(String id){
     var indexWhere = _maxAdBean.secondOpenAdList.indexWhere((element) => element.id==id);
@@ -140,13 +144,6 @@ class LoadAdUtils2{
 
   removeAdByType(AdType adType){
     _resultMap.remove(adType);
-  }
-
-  removeAdById(String id){
-    var infoBean = getAdInfoById(id);
-    if(null!=infoBean){
-      removeAdByType(infoBean.adType);
-    }
   }
 
   printDebug(Object? object){

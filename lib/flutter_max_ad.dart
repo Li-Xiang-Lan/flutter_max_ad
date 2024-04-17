@@ -168,7 +168,8 @@ class FlutterMaxAd {
           },
           onAdHiddenCallback: (ad) {
             _fullAdShowing=false;
-            loadAdByType(AdType.inter);
+            var isOpen = LoadAdUtils.instance.checkIsOpenTypeById(ad.adUnitId)||LoadAdUtils2.instance.checkIsOpenTypeById(ad.adUnitId);
+            loadAdByType(isOpen?AdType.open:AdType.inter);
             _adShowListener?.onAdHidden.call(ad);
           },
           onAdRevenuePaidCallback: (MaxAd ad){
