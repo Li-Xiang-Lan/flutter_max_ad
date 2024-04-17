@@ -37,7 +37,7 @@ class LoadAdUtils2{
 
   _loadAdByType(AdType adType,MaxAdInfoBean bean){
     printDebug("FlutterMaxAd2 --->start load $adType ad,data=${bean.toString()}");
-    switch(bean.adType){
+    switch(adType){
       case AdType.open:
         if(bean.adType==AdType.open){
           AppLovinMAX.loadAppOpenAd(bean.id);
