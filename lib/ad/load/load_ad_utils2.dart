@@ -82,24 +82,24 @@ class LoadAdUtils2{
     }
   }
 
-  loadAdSuccess(AdType adType,MaxAd ad){
+  loadAdSuccess(MaxAd ad){
     var info = getAdInfoById(ad.adUnitId);
     if(null!=info){
-      printDebug("FlutterMaxAd2 --->$adType--->${ad.adUnitId}--->${info.id} load success");
-      _loadingList.remove(adType);
-      _resultMap[adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
+      printDebug("FlutterMaxAd2 --->${info.adType}--->${ad.adUnitId}--->${info.id} load success");
+      _loadingList.remove(info.adType);
+      _resultMap[info.adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
     }
   }
 
-  loadAdFail(AdType adType,String adUnitId){
+  loadAdFail(String adUnitId){
     var info = getAdInfoById(adUnitId);
     if(null!=info){
-      printDebug("FlutterMaxAd2 --->$adType--->$adUnitId--->${info.id} load fail");
+      printDebug("FlutterMaxAd2 --->${info.adType}--->$adUnitId--->${info.id} load fail");
       var nextAdInfo = _getNextAdInfoById(adUnitId);
       if(null!=nextAdInfo){
-        _loadAdByType(adType, nextAdInfo);
+        _loadAdByType(info.adType, nextAdInfo);
       }else{
-        _loadingList.remove(adType);
+        _loadingList.remove(info.adType);
       }
     }
   }
