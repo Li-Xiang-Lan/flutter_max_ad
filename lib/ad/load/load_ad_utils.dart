@@ -146,13 +146,6 @@ class LoadAdUtils{
     _resultMap.remove(adType);
   }
 
-  removeAdById(String id){
-    var infoBean = getAdInfoById(id);
-    if(null!=infoBean){
-      removeAdByType(infoBean.adType);
-    }
-  }
-
   printDebug(Object? object){
     if(kDebugMode){
       print(object);

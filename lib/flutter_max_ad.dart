@@ -78,13 +78,13 @@ class FlutterMaxAd {
               printDebug("FlutterMaxAd show ad success---->${ad.adUnitId}");
               _fullAdShowing=true;
               AdNumUtils.instance.updateShowNum();
-              _removeMaxAd(ad.adUnitId);
+              _removeMaxAd(AdType.open);
               _adShowListener?.showAdSuccess.call(ad);
             },
             onAdDisplayFailedCallback: (MaxAd ad, MaxError error) {
               printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
               _fullAdShowing=false;
-              _removeMaxAd(ad.adUnitId);
+              _removeMaxAd(AdType.open);
               _adShowListener?.showAdFail.call(ad,error);
             },
             onAdClickedCallback: (MaxAd ad) {
@@ -114,14 +114,14 @@ class FlutterMaxAd {
           onAdDisplayedCallback: (MaxAd ad) {
             printDebug("FlutterMaxAd show ad success---->${ad.adUnitId}");
             _fullAdShowing=true;
-            _removeMaxAd(ad.adUnitId);
+            _removeMaxAd(AdType.reward);
             AdNumUtils.instance.updateShowNum();
             _adShowListener?.showAdSuccess.call(ad);
           },
           onAdDisplayFailedCallback: (MaxAd ad, MaxError error) {
             printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
             _fullAdShowing=false;
-            _removeMaxAd(ad.adUnitId);
+            _removeMaxAd(AdType.reward);
             _adShowListener?.showAdFail.call(ad,error);
           },
           onAdClickedCallback: (MaxAd ad) {
@@ -154,13 +154,13 @@ class FlutterMaxAd {
           onAdDisplayedCallback: (ad) {
             printDebug("FlutterMaxAd show ad success---->${ad.adUnitId}");
             _fullAdShowing=true;
-            _removeMaxAd(ad.adUnitId);
+            _removeMaxAd(AdType.inter);
             AdNumUtils.instance.updateShowNum();
             _adShowListener?.showAdSuccess.call(ad);
           },
           onAdDisplayFailedCallback: (ad, error) {
             printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
-            _removeMaxAd(ad.adUnitId);
+            _removeMaxAd(AdType.inter);
             _adShowListener?.showAdFail.call(ad,error);
           },
           onAdClickedCallback: (ad) {
@@ -178,9 +178,9 @@ class FlutterMaxAd {
     );
   }
 
-  _removeMaxAd(String adUnitId){
-    LoadAdUtils.instance.removeAdById(adUnitId);
-    LoadAdUtils2.instance.removeAdById(adUnitId);
+  _removeMaxAd(AdType adType){
+    LoadAdUtils.instance.removeAdByType(adType);
+    LoadAdUtils2.instance.removeAdByType(adType);
   }
 
   setMaxAdInfo(MaxAdBean maxAdBean){
@@ -219,8 +219,7 @@ class FlutterMaxAd {
             AppLovinMAX.showRewardedAd(resultBean.maxAd.adUnitId);
           }else{
             printDebug("FlutterMaxAd isRewardedAdReady=false");
-            LoadAdUtils.instance.removeAdByType(adType);
-            LoadAdUtils2.instance.removeAdByType(adType);
+            _removeMaxAd(adType);
             _adShowListener?.showAdFail.call(null,null);
           }
           break;
@@ -229,8 +228,7 @@ class FlutterMaxAd {
             AppLovinMAX.showInterstitial(resultBean.maxAd.adUnitId);
           }else{
             printDebug("FlutterMaxAd isRewardedAdReady=false");
-            LoadAdUtils.instance.removeAdByType(adType);
-            LoadAdUtils2.instance.removeAdByType(adType);
+            _removeMaxAd(adType);
             _adShowListener?.showAdFail.call(null,null);
           }
           break;
@@ -240,8 +238,7 @@ class FlutterMaxAd {
               AppLovinMAX.showAppOpenAd(resultBean.maxAd.adUnitId);
             }else{
               printDebug("FlutterMaxAd isRewardedAdReady=false");
-              LoadAdUtils.instance.removeAdByType(adType);
-              LoadAdUtils2.instance.removeAdByType(adType);
+              _removeMaxAd(adType);
               _adShowListener?.showAdFail.call(null,null);
             }
           }else if(resultBean.maxAdInfoBean.adType==AdType.inter){
@@ -249,8 +246,7 @@ class FlutterMaxAd {
               AppLovinMAX.showInterstitial(resultBean.maxAd.adUnitId);
             }else{
               printDebug("FlutterMaxAd isRewardedAdReady=false");
-              LoadAdUtils.instance.removeAdByType(adType);
-              LoadAdUtils2.instance.removeAdByType(adType);
+              _removeMaxAd(adType);
               _adShowListener?.showAdFail.call(null,null);
             }
           }
