@@ -2,18 +2,17 @@ import 'dart:async';
 
 import 'package:applovin_max/applovin_max.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_result_bean.dart';
-import 'package:flutter_max_ad/ad/ad_type.dart';
-import 'package:flutter_max_ad/ad/load_ad/base_load.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_bean.dart';
+import 'package:flutter_max_ad/ad/ad_type/base_load.dart';
 import 'package:flutter_max_ad/flutter_max_ad.dart';
 
-class OpenAd extends BaseLoad{
+class RewordedAd extends BaseLoad{
   List<MaxAdInfoBean> adInfoList;
   MaxAdResultBean? _adResultBean;
   bool _loading=false;
   Timer? _loadCountTimer;
 
-  OpenAd({
+  RewordedAd({
     required this.adInfoList
   });
 
@@ -42,14 +41,16 @@ class OpenAd extends BaseLoad{
       return;
     }
     if(_loading&&index==0){
-      FlutterMaxAd.instance.printDebug("FlutterMaxAd open ad is loading");
+      FlutterMaxAd.instance.printDebug("FlutterMaxAd Reworded ad is loading");
       return;
     }
     if(index<adInfoList.length){
       _loading=true;
-      var maxAdInfoBean = adInfoList[index];
-      _startLoadAd(maxAdInfoBean);
-      _startCountDownTimer(maxAdInfoBean,(){
+      var infoBean = adInfoList[index];
+      FlutterMaxAd.instance.printDebug("FlutterMaxAd start load ad----->${infoBean.toString()}");
+      FlutterMaxAd.instance.startLoadAdCallBack();
+      AppLovinMAX.loadRewardedAd(infoBean.id);
+      _startCountDownTimer(infoBean,(){
         loadAd(index+1);
       });
       return;
@@ -69,37 +70,27 @@ class OpenAd extends BaseLoad{
   @override
   loadAdSuccess(MaxAd ad) {
     _stopCountDownTimer();
-    _adResultBean=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch);
+    // _adResultBean=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch);
     _loading=false;
   }
 
   @override
   bool isLoading() => _loading;
 
-  // @override
-  // Future<MaxAd?> getMaxAd() async{
-  //   if(null==_adResultBean){
-  //     return null;
-  //   }
-  //   var maxAdInfoBean = getMaxInfoById(_adResultBean?.maxAd.adUnitId??"");
-  //   if(null!=maxAdInfoBean){
-  //     if(maxAdInfoBean.adType==AdType.open){
-  //       var isAppOpenAdReady=await AppLovinMAX.isAppOpenAdReady(_adResultBean?.maxAd.adUnitId??"")??false;
-  //       if(isAppOpenAdReady){
-  //         return _adResultBean?.maxAd;
-  //       }
-  //     }else if(maxAdInfoBean.adType==AdType.inter){
-  //       var isInterstitialReady=await AppLovinMAX.isInterstitialReady(_adResultBean?.maxAd.adUnitId??"")??false;
-  //       if(isInterstitialReady){
-  //         return _adResultBean?.maxAd;
-  //       }
-  //     }
-  //   }
-  //   _adResultBean=null;
-  //   return null;
-  // }
   @override
   MaxAd? getMaxAd() {
+    // if(null==_adResultBean){
+    //   FlutterMaxAd.instance.printDebug("FlutterMaxAd reward ad result is null");
+    //   loadAd(0);
+    //   return null;
+    // }
+    // var isRewardedAdReady=await AppLovinMAX.isRewardedAdReady(_adResultBean?.maxAd.adUnitId??"")??false;
+    // if(isRewardedAdReady){
+    //   return _adResultBean?.maxAd;
+    // }
+    // _adResultBean=null;
+    // loadAd(0);
+    // return null;
     return _adResultBean?.maxAd;
   }
 
@@ -130,20 +121,5 @@ class OpenAd extends BaseLoad{
   _stopCountDownTimer(){
     _loadCountTimer?.cancel();
     _loadCountTimer=null;
-  }
-
-  _startLoadAd(MaxAdInfoBean infoBean){
-    FlutterMaxAd.instance.printDebug("FlutterMaxAd start load ad----->${infoBean.toString()}");
-    switch(infoBean.adType){
-      case AdType.open:
-        FlutterMaxAd.instance.startLoadAdCallBack();
-        AppLovinMAX.loadAppOpenAd(infoBean.id);
-        break;
-      case AdType.inter:
-        FlutterMaxAd.instance.startLoadAdCallBack();
-        AppLovinMAX.loadInterstitial(infoBean.id);
-        break;
-      default:break;
-    }
   }
 }

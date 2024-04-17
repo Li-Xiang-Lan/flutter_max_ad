@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:applovin_max/applovin_max.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_result_bean.dart';
-import 'package:flutter_max_ad/ad/load_ad/base_load.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_bean.dart';
+import 'package:flutter_max_ad/ad/ad_type/base_load.dart';
 import 'package:flutter_max_ad/flutter_max_ad.dart';
 
 class InterAd extends BaseLoad{
@@ -70,7 +70,7 @@ class InterAd extends BaseLoad{
   @override
   loadAdSuccess(MaxAd ad) {
     _stopCountDownTimer();
-    _adResultBean=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch);
+    // _adResultBean=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch);
     _loading=false;
   }
 

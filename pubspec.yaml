@@ -1,10 +1,10 @@
 name: flutter_max_ad
 description: flutter max ad
-version: 0.1.1
+version: 0.1.2
 homepage: https://github.com/Li-Xiang-Lan/flutter_max_ad.git
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.3.3 <4.0.0'
   flutter: ">=3.3.0"
 
 dependencies:
@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
   get_storage: 2.1.1
-  applovin_max: 3.8.0
+  applovin_max: 3.9.2
   adjust_sdk: 4.31.0
   facebook_app_events: 0.19.2
 
