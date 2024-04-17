@@ -82,31 +82,31 @@ class LoadAdUtils{
     }
   }
 
-  loadAdSuccess(MaxAd ad){
-    var info = _getAdInfoById(ad.adUnitId);
+  loadAdSuccess(AdType adType,MaxAd ad){
+    var info = getAdInfoById(ad.adUnitId);
     if(null!=info){
-      printDebug("FlutterMaxAd --->${info.adType}--->${ad.adUnitId}--->${info.id} load success");
-      _loadingList.remove(info.adType);
-      _resultMap[info.adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
+      printDebug("FlutterMaxAd --->$adType--->${ad.adUnitId}--->${info.id} load success");
+      _loadingList.remove(adType);
+      _resultMap[adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
     }
   }
 
-  loadAdFail(String adUnitId){
-    var info = _getAdInfoById(adUnitId);
+  loadAdFail(AdType adType,String adUnitId){
+    var info = getAdInfoById(adUnitId);
     if(null!=info){
-      printDebug("FlutterMaxAd --->${info.adType}--->$adUnitId--->${info.id} load fail");
-      var nextAdInfo = getNextAdInfoById(adUnitId);
+      printDebug("FlutterMaxAd --->$adType--->$adUnitId--->${info.id} load fail");
+      var nextAdInfo = _getNextAdInfoById(adUnitId);
       if(null!=nextAdInfo){
-        _loadAdByType(info.adType, nextAdInfo);
+        _loadAdByType(adType, nextAdInfo);
       }else{
-        _loadingList.remove(info.adType);
+        _loadingList.remove(adType);
       }
     }
   }
 
   MaxAdResultBean? getAdResultByAdType(AdType adType)=>_resultMap[adType];
 
-  MaxAdInfoBean? _getAdInfoById(String id){
+  MaxAdInfoBean? getAdInfoById(String id){
     var indexWhere = _maxAdBean.firstOpenAdList.indexWhere((element) => element.id==id);
     if(indexWhere>=0){
       return _maxAdBean.firstOpenAdList[indexWhere];
@@ -122,7 +122,7 @@ class LoadAdUtils{
     return null;
   }
 
-  MaxAdInfoBean? getNextAdInfoById(String id){
+  MaxAdInfoBean? _getNextAdInfoById(String id){
     var indexWhere = _maxAdBean.firstOpenAdList.indexWhere((element) => element.id==id);
     if(indexWhere>=0&&_maxAdBean.firstOpenAdList.length>indexWhere+1){
       return _maxAdBean.firstOpenAdList[indexWhere+1];
@@ -143,7 +143,7 @@ class LoadAdUtils{
   }
 
   removeAdById(String id){
-    var infoBean = _getAdInfoById(id);
+    var infoBean = getAdInfoById(id);
     if(null!=infoBean){
       removeAdByType(infoBean.adType);
     }

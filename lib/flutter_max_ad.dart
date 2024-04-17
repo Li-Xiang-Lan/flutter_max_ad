@@ -66,13 +66,13 @@ class FlutterMaxAd {
     AppLovinMAX.setAppOpenAdListener(
         AppOpenAdListener(
             onAdLoadedCallback: (MaxAd ad) {
-              LoadAdUtils.instance.loadAdSuccess(ad);
-              LoadAdUtils2.instance.loadAdSuccess(ad);
+              LoadAdUtils.instance.loadAdSuccess(AdType.inter,ad);
+              LoadAdUtils2.instance.loadAdSuccess(AdType.inter,ad);
               _loadAdListener?.loadSuccess.call();
             },
             onAdLoadFailedCallback: (String adUnitId, MaxError error) {
-              LoadAdUtils.instance.loadAdFail(adUnitId);
-              LoadAdUtils2.instance.loadAdFail(adUnitId);
+              LoadAdUtils.instance.loadAdFail(AdType.inter,adUnitId);
+              LoadAdUtils2.instance.loadAdFail(AdType.inter,adUnitId);
             },
             onAdDisplayedCallback: (MaxAd ad) {
               printDebug("FlutterMaxAd show ad success---->${ad.adUnitId}");
@@ -103,13 +103,13 @@ class FlutterMaxAd {
     AppLovinMAX.setRewardedAdListener(
         RewardedAdListener(
           onAdLoadedCallback: (MaxAd ad) {
-            LoadAdUtils.instance.loadAdSuccess(ad);
-            LoadAdUtils2.instance.loadAdSuccess(ad);
+            LoadAdUtils.instance.loadAdSuccess(AdType.reward,ad);
+            LoadAdUtils2.instance.loadAdSuccess(AdType.reward,ad);
             _loadAdListener?.loadSuccess.call();
           },
           onAdLoadFailedCallback: (String adUnitId, MaxError error) {
-            LoadAdUtils.instance.loadAdFail(adUnitId);
-            LoadAdUtils2.instance.loadAdFail(adUnitId);
+            LoadAdUtils.instance.loadAdFail(AdType.reward,adUnitId);
+            LoadAdUtils2.instance.loadAdFail(AdType.reward,adUnitId);
           },
           onAdDisplayedCallback: (MaxAd ad) {
             printDebug("FlutterMaxAd show ad success---->${ad.adUnitId}");
@@ -143,13 +143,13 @@ class FlutterMaxAd {
     AppLovinMAX.setInterstitialListener(
         InterstitialListener(
           onAdLoadedCallback: (ad) {
-            LoadAdUtils.instance.loadAdSuccess(ad);
-            LoadAdUtils2.instance.loadAdSuccess(ad);
+            LoadAdUtils.instance.loadAdSuccess(AdType.inter,ad);
+            LoadAdUtils2.instance.loadAdSuccess(AdType.inter,ad);
             _loadAdListener?.loadSuccess.call();
           },
           onAdLoadFailedCallback: (adUnitId, error) {
-            LoadAdUtils.instance.loadAdFail(adUnitId);
-            LoadAdUtils2.instance.loadAdFail(adUnitId);
+            LoadAdUtils.instance.loadAdFail(AdType.inter,adUnitId);
+            LoadAdUtils2.instance.loadAdFail(AdType.inter,adUnitId);
           },
           onAdDisplayedCallback: (ad) {
             printDebug("FlutterMaxAd show ad success---->${ad.adUnitId}");
@@ -277,8 +277,8 @@ class FlutterMaxAd {
   }
 
   MaxAdInfoBean? _getMaxInfoById(String id){
-    var infoBean = LoadAdUtils.instance.getNextAdInfoById(id);
-    infoBean ??= LoadAdUtils2.instance.getNextAdInfoById(id);
+    var infoBean = LoadAdUtils.instance.getAdInfoById(id);
+    infoBean ??= LoadAdUtils2.instance.getAdInfoById(id);
     return infoBean;
   }
 
