@@ -66,13 +66,11 @@ class FlutterMaxAd {
     AppLovinMAX.setAppOpenAdListener(
         AppOpenAdListener(
             onAdLoadedCallback: (MaxAd ad) {
-              printDebug("FlutterMaxAd load open ad success,adUnitId--->${ad.adUnitId}");
               LoadAdUtils.instance.loadAdSuccess(ad);
               LoadAdUtils2.instance.loadAdSuccess(ad);
               _loadAdListener?.loadSuccess.call();
             },
             onAdLoadFailedCallback: (String adUnitId, MaxError error) {
-              printDebug("FlutterMaxAd load open ad fail--->adUnitId=$adUnitId---${error.code}---${error.message}");
               LoadAdUtils.instance.loadAdFail(adUnitId);
               LoadAdUtils2.instance.loadAdFail(adUnitId);
             },
@@ -105,13 +103,11 @@ class FlutterMaxAd {
     AppLovinMAX.setRewardedAdListener(
         RewardedAdListener(
           onAdLoadedCallback: (MaxAd ad) {
-            printDebug("FlutterMaxAd load reward ad success,adUnitId--->${ad.adUnitId}");
             LoadAdUtils.instance.loadAdSuccess(ad);
             LoadAdUtils2.instance.loadAdSuccess(ad);
             _loadAdListener?.loadSuccess.call();
           },
           onAdLoadFailedCallback: (String adUnitId, MaxError error) {
-            printDebug("FlutterMaxAd load reward ad fail--->adUnitId=$adUnitId---${error.code}---${error.message}");
             LoadAdUtils.instance.loadAdFail(adUnitId);
             LoadAdUtils2.instance.loadAdFail(adUnitId);
           },
@@ -147,13 +143,11 @@ class FlutterMaxAd {
     AppLovinMAX.setInterstitialListener(
         InterstitialListener(
           onAdLoadedCallback: (ad) {
-            printDebug("FlutterMaxAd load inter ad success,adUnitId--->${ad.adUnitId}");
             LoadAdUtils.instance.loadAdSuccess(ad);
             LoadAdUtils2.instance.loadAdSuccess(ad);
             _loadAdListener?.loadSuccess.call();
           },
           onAdLoadFailedCallback: (adUnitId, error) {
-            printDebug("FlutterMaxAd load inter ad fail--->adUnitId=$adUnitId---${error.code}---${error.message}");
             LoadAdUtils.instance.loadAdFail(adUnitId);
             LoadAdUtils2.instance.loadAdFail(adUnitId);
           },
