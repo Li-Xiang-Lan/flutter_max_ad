@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_bean.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_result_bean.dart';
 import 'package:flutter_max_ad/ad/ad_type.dart';
+import 'package:flutter_max_ad/flutter_max_ad.dart';
 
 class LoadAdUtils2{
   static final LoadAdUtils2 _instance = LoadAdUtils2();
@@ -40,17 +41,21 @@ class LoadAdUtils2{
     switch(adType){
       case AdType.open:
         if(bean.adType==AdType.open){
+          FlutterMaxAd.instance.startLoadAd();
           AppLovinMAX.loadAppOpenAd(bean.id);
         }else if(bean.adType==AdType.inter){
+          FlutterMaxAd.instance.startLoadAd();
           AppLovinMAX.loadInterstitial(bean.id);
         }else{
           _loadingList.remove(adType);
         }
         break;
       case AdType.reward:
+        FlutterMaxAd.instance.startLoadAd();
         AppLovinMAX.loadRewardedAd(bean.id);
         break;
       case AdType.inter:
+        FlutterMaxAd.instance.startLoadAd();
         AppLovinMAX.loadInterstitial(bean.id);
         break;
       default:

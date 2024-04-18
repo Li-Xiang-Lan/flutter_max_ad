@@ -296,6 +296,10 @@ class FlutterMaxAd {
     return true;
   }
 
+  startLoadAd(){
+    _loadAdListener?.startLoad.call();
+  }
+
   printDebug(Object? object){
     if(kDebugMode){
       print(object);
