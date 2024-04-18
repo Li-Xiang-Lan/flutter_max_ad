@@ -282,6 +282,7 @@ class FlutterMaxAd {
   }
 
   bool checkHasCache(AdType adType){
+
     if(adType==AdType.open){
       var hasCache = LoadAdUtils.instance.checkHasCache(AdType.open)||LoadAdUtils.instance.checkHasCache(AdType.inter);
       if(!hasCache){
