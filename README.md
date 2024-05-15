@@ -71,10 +71,30 @@ pod 'AppLovinMediationUnityAdsAdapter'
 Add content into your info.list
 
 ```dart
+<key>CFBundleURLTypes</key>
+<array>
+<dict>
+<key>CFBundleURLSchemes</key>
+<array>
+<string>fb[APP_ID]</string>
+</array>
+</dict>
+</array>
+<key>FacebookAppID</key>
+<string>[APP_ID]</string>
+<key>FacebookClientToken</key>
+<string>[CLIENT_TOKEN]</string>
+<key>FacebookDisplayName</key>
+<string>[APP_NAME]</string>
+
 <key>GADApplicationIdentifier</key>
 <string>ca-app-pub-3940256099942544~2558002522</string>
 <key>SKAdNetworkItems</key>
 <array>
+<dict>
+<key>SKAdNetworkIdentifier</key>
+<string>su67r6k2v3.skadnetwork</string>
+</dict>
 <dict>
 <key>SKAdNetworkIdentifier</key>
 <string>cstr6suwn9.skadnetwork</string>
