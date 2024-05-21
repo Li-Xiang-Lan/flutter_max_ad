@@ -137,11 +137,11 @@ class LoadAdUtils2{
       return _maxAdBean.secondOpenAdList[indexWhere+1];
     }
     var indexWhere2 = _maxAdBean.secondRewardedAdList.indexWhere((element) => element.id==id);
-    if(indexWhere2>=0&&_maxAdBean.secondRewardedAdList.length>indexWhere+1){
+    if(indexWhere2>=0&&_maxAdBean.secondRewardedAdList.length>indexWhere2+1){
       return _maxAdBean.secondRewardedAdList[indexWhere2+1];
     }
     var indexWhere3 = _maxAdBean.secondInterAdList.indexWhere((element) => element.id==id);
-    if(indexWhere3>=0&&_maxAdBean.secondInterAdList.length>indexWhere+1){
+    if(indexWhere3>=0&&_maxAdBean.secondInterAdList.length>indexWhere3+1){
       return _maxAdBean.secondInterAdList[indexWhere3+1];
     }
     return null;
