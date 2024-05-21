@@ -8,10 +8,10 @@ class AdShowListener{
   final Function(MaxAd ad, MaxReward reward)? onAdReceivedReward;
   final Function(MaxAd ad,MaxAdInfoBean? maxAdInfoBean)? onAdRevenuePaidCallback;
   AdShowListener({
-    required this.showAdSuccess,
-    required this.showAdFail,
     required this.onAdHidden,
-    required this.onAdRevenuePaidCallback,
+    this.showAdSuccess,
+    this.showAdFail,
+    this.onAdRevenuePaidCallback,
     this.onAdReceivedReward,
 });
 }
