@@ -10,10 +10,25 @@ public class FlutterMaxAdPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     switch call.method {
-    case "getPlatformVersion":
-      result("iOS " + UIDevice.current.systemVersion)
+    case "dismissMaxAdView":
+        var top = getTopViewController()
+        top?.dismiss(animated: true)
     default:
       result(FlutterMethodNotImplemented)
     }
   }
+
+   func getTopViewController() -> UIViewController? {
+          var rootViewController: UIViewController?
+          if #available(iOS 13.0, *) {
+            let keyWindow = UIApplication.shared.windows.filter { $0.isKeyWindow }.first
+            rootViewController = keyWindow?.rootViewController
+          } else {
+            rootViewController = UIApplication.shared.keyWindow?.rootViewController
+          }
+          while let presentedViewController = rootViewController?.presentedViewController {
+            rootViewController = presentedViewController
+          }
+          return rootViewController
+    }
 }

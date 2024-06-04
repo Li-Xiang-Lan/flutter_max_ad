@@ -22,4 +22,6 @@ abstract class FlutterMaxAdPlatform extends PlatformInterface {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }
+  Future<String> dismissMaxAdView()=>_instance.dismissMaxAdView();
+
 }

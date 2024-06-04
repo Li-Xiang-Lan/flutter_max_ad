@@ -11,6 +11,7 @@ import 'package:flutter_max_ad/ad/ad_type.dart';
 import 'package:flutter_max_ad/ad/listener/load_ad_listener.dart';
 import 'package:flutter_max_ad/ad/load/load_ad_utils.dart';
 import 'package:flutter_max_ad/ad/load/load_ad_utils2.dart';
+import 'package:flutter_max_ad/flutter_max_ad_platform_interface.dart';
 
 class FlutterMaxAd {
   static final FlutterMaxAd _instance = FlutterMaxAd();
@@ -308,5 +309,9 @@ class FlutterMaxAd {
     if(kDebugMode){
       print(object);
     }
+  }
+
+  dismissMaxAdView(){
+    FlutterMaxAdPlatform.instance.dismissMaxAdView();
   }
 }

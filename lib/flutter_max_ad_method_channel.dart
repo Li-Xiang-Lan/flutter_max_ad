@@ -9,4 +9,8 @@ class MethodChannelFlutterMaxAd extends FlutterMaxAdPlatform {
   @visibleForTesting
   final methodChannel = const MethodChannel('flutter_max_ad');
 
+  @override
+  Future<String> dismissMaxAdView() async{
+    return await methodChannel.invokeMethod("dismissMaxAdView");
+  }
 }
