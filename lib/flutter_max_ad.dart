@@ -286,20 +286,7 @@ class FlutterMaxAd {
     return infoBean;
   }
 
-  bool checkHasCache(AdType adType){
-    if(adType==AdType.open){
-      var hasCache = LoadAdUtils.instance.checkHasCache(AdType.open)||LoadAdUtils.instance.checkHasCache(AdType.inter);
-      if(!hasCache){
-        return LoadAdUtils2.instance.checkHasCache(AdType.open)||LoadAdUtils2.instance.checkHasCache(AdType.inter);
-      }
-      return true;
-    }
-    var hasCache = LoadAdUtils.instance.checkHasCache(adType);
-    if(!hasCache){
-      return LoadAdUtils2.instance.checkHasCache(adType);
-    }
-    return true;
-  }
+  bool checkHasCache(AdType adType)=>LoadAdUtils.instance.checkHasCache(adType)||LoadAdUtils2.instance.checkHasCache(adType);
 
   startLoadAd(){
     _loadAdListener?.startLoad.call();

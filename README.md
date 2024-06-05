@@ -66,6 +66,8 @@ pod 'AppLovinMediationIronSourceAdapter'
 pod 'AppLovinMediationVungleAdapter'
 pod 'AppLovinMediationMintegralAdapter'
 pod 'AppLovinMediationUnityAdsAdapter'
+pod 'AppLovinMediationByteDanceAdapter'
+pod 'AppLovinMediationFacebookAdapter'
 ```
 
 Add content into your info.list
