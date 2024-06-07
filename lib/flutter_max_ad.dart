@@ -80,7 +80,7 @@ class FlutterMaxAd {
               _fullAdShowing=true;
               AdNumUtils.instance.updateShowNum();
               _removeMaxAd(AdType.open);
-              _adShowListener?.showAdSuccess?.call(ad);
+              _adShowListener?.showAdSuccess?.call(ad,_getMaxInfoById(ad.adUnitId));
             },
             onAdDisplayFailedCallback: (MaxAd ad, MaxError error) {
               printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
@@ -117,7 +117,7 @@ class FlutterMaxAd {
             _fullAdShowing=true;
             _removeMaxAd(AdType.reward);
             AdNumUtils.instance.updateShowNum();
-            _adShowListener?.showAdSuccess?.call(ad);
+            _adShowListener?.showAdSuccess?.call(ad,_getMaxInfoById(ad.adUnitId));
           },
           onAdDisplayFailedCallback: (MaxAd ad, MaxError error) {
             printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
@@ -158,7 +158,7 @@ class FlutterMaxAd {
             var isOpen = LoadAdUtils.instance.checkIsOpenTypeById(ad.adUnitId)||LoadAdUtils2.instance.checkIsOpenTypeById(ad.adUnitId);
             _removeMaxAd(isOpen?AdType.open:AdType.inter);
             AdNumUtils.instance.updateShowNum();
-            _adShowListener?.showAdSuccess?.call(ad);
+            _adShowListener?.showAdSuccess?.call(ad,_getMaxInfoById(ad.adUnitId));
           },
           onAdDisplayFailedCallback: (ad, error) {
             printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
@@ -277,7 +277,7 @@ class FlutterMaxAd {
     adjustAdRevenue.adRevenuePlacement=ad.placement;
     Adjust.trackAdRevenueNew(adjustAdRevenue);
     _facebookAppEvents.logPurchase(amount: ad.revenue, currency: "USD");
-    _adShowListener?.onAdRevenuePaidCallback?.call(ad,_getMaxInfoById(ad.adUnitId));
+    _adShowListener?.onAdRevenuePaidCallback?.call(ad);
   }
 
   MaxAdInfoBean? _getMaxInfoById(String id){
