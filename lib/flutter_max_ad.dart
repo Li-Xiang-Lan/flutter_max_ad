@@ -299,6 +299,7 @@ class FlutterMaxAd {
   }
 
   dismissMaxAdView(){
+    _fullAdShowing=false;
     FlutterMaxAdPlatform.instance.dismissMaxAdView();
   }
 }
