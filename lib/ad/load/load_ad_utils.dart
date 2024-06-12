@@ -39,17 +39,17 @@ class LoadAdUtils{
   _loadAdByType(AdType adType,MaxAdInfoBean bean){
     printDebug("FlutterMaxAd --->start load $adType ad,data=${bean.toString()}");
     switch(adType){
-      case AdType.open:
-        if(bean.adType==AdType.open){
-          FlutterMaxAd.instance.startLoadAd();
-          AppLovinMAX.loadAppOpenAd(bean.id);
-        }else if(bean.adType==AdType.inter){
-          FlutterMaxAd.instance.startLoadAd();
-          AppLovinMAX.loadInterstitial(bean.id);
-        }else{
-          _loadingList.remove(adType);
-        }
-        break;
+      // case AdType.open:
+      //   if(bean.adType==AdType.open){
+      //     FlutterMaxAd.instance.startLoadAd();
+      //     AppLovinMAX.loadAppOpenAd(bean.id);
+      //   }else if(bean.adType==AdType.inter){
+      //     FlutterMaxAd.instance.startLoadAd();
+      //     AppLovinMAX.loadInterstitial(bean.id);
+      //   }else{
+      //     _loadingList.remove(adType);
+      //   }
+      //   break;
       case AdType.reward:
         FlutterMaxAd.instance.startLoadAd();
         AppLovinMAX.loadRewardedAd(bean.id);
@@ -80,7 +80,7 @@ class LoadAdUtils{
 
   List<MaxAdInfoBean> _getAdListByType(AdType adType){
     switch(adType){
-      case AdType.open: return _maxAdBean.firstOpenAdList;
+      // case AdType.open: return _maxAdBean.firstOpenAdList;
       case AdType.reward: return _maxAdBean.firstRewardedAdList;
       case AdType.inter: return _maxAdBean.firstInterAdList;
       default: return [];
@@ -90,30 +90,30 @@ class LoadAdUtils{
   loadAdSuccess(MaxAd ad){
     var info = getAdInfoById(ad.adUnitId);
     if(null!=info){
-      var adType = checkIsOpenTypeById(ad.adUnitId)?AdType.open:info.adType;
-      printDebug("FlutterMaxAd --->$adType--->${ad.adUnitId}--->${info.id} load success");
-      _loadingList.remove(adType);
-      _resultMap[adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
+      // var adType = checkIsOpenTypeById(ad.adUnitId)?AdType.open:info.adType;
+      printDebug("FlutterMaxAd --->${info.adType}--->${ad.adUnitId}--->${info.id} load success");
+      _loadingList.remove(info.adType);
+      _resultMap[info.adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
     }
   }
 
   loadAdFail(String adUnitId){
     var info = getAdInfoById(adUnitId);
     if(null!=info){
-      var adType = checkIsOpenTypeById(adUnitId)?AdType.open:info.adType;
-      printDebug("FlutterMaxAd --->$adType--->$adUnitId--->${info.id} load fail");
+      // var adType = checkIsOpenTypeById(adUnitId)?AdType.open:info.adType;
+      printDebug("FlutterMaxAd --->${info.adType}--->$adUnitId--->${info.id} load fail");
       var nextAdInfo = _getNextAdInfoById(adUnitId);
       if(null!=nextAdInfo){
-        _loadAdByType(adType, nextAdInfo);
+        _loadAdByType(info.adType, nextAdInfo);
       }else{
-        _loadingList.remove(adType);
+        _loadingList.remove(info.adType);
       }
     }
   }
 
   MaxAdResultBean? getAdResultByAdType(AdType adType)=>_resultMap[adType];
 
-  bool checkIsOpenTypeById(String id)=>_maxAdBean.firstOpenAdList.indexWhere((element) => element.id==id)>=0;
+  // bool checkIsOpenTypeById(String id)=>_maxAdBean.firstOpenAdList.indexWhere((element) => element.id==id)>=0;
 
   MaxAdInfoBean? getAdInfoById(String id){
     var indexWhere = _maxAdBean.firstOpenAdList.indexWhere((element) => element.id==id);

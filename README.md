@@ -6,6 +6,8 @@ A new Flutter project.
 
 ### Set Proguard
 
+0.2.2+ is c38
+
 #### Android
 
 Open your android->app->repositories, add content in this file

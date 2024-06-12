@@ -1,3 +1,3 @@
 enum AdType{
-  open,inter,reward,native
+  inter,reward,native
 }

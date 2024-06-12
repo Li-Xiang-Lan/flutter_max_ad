@@ -40,7 +40,6 @@ class FlutterMaxAd {
         AppLovinMAX.showMediationDebugger();
       }
       _setAdListener();
-      loadAdByType(AdType.open);
       loadAdByType(AdType.reward);
       loadAdByType(AdType.inter);
     }
@@ -64,43 +63,6 @@ class FlutterMaxAd {
   }
 
   _setAdListener(){
-    AppLovinMAX.setAppOpenAdListener(
-        AppOpenAdListener(
-            onAdLoadedCallback: (MaxAd ad) {
-              LoadAdUtils.instance.loadAdSuccess(ad);
-              LoadAdUtils2.instance.loadAdSuccess(ad);
-              _loadAdListener?.loadSuccess.call();
-            },
-            onAdLoadFailedCallback: (String adUnitId, MaxError error) {
-              LoadAdUtils.instance.loadAdFail(adUnitId);
-              LoadAdUtils2.instance.loadAdFail(adUnitId);
-            },
-            onAdDisplayedCallback: (MaxAd ad) {
-              printDebug("FlutterMaxAd show ad success---->${ad.adUnitId}");
-              _fullAdShowing=true;
-              AdNumUtils.instance.updateShowNum();
-              _removeMaxAd(AdType.open);
-              _adShowListener?.showAdSuccess?.call(ad,_getMaxInfoById(ad.adUnitId));
-            },
-            onAdDisplayFailedCallback: (MaxAd ad, MaxError error) {
-              printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
-              _fullAdShowing=false;
-              _removeMaxAd(AdType.open);
-              _adShowListener?.showAdFail?.call(ad,error);
-            },
-            onAdClickedCallback: (MaxAd ad) {
-              AdNumUtils.instance.updateClickNum();
-            },
-            onAdHiddenCallback: (MaxAd ad) {
-              _fullAdShowing=false;
-              loadAdByType(AdType.open);
-              _adShowListener?.onAdHidden.call(ad);
-            },
-            onAdRevenuePaidCallback: (MaxAd ad){
-              _onAdRevenuePaidByAdjust(ad);
-            }
-        )
-    );
     AppLovinMAX.setRewardedAdListener(
         RewardedAdListener(
           onAdLoadedCallback: (MaxAd ad) {
@@ -155,15 +117,13 @@ class FlutterMaxAd {
           onAdDisplayedCallback: (ad) {
             printDebug("FlutterMaxAd show ad success---->${ad.adUnitId}");
             _fullAdShowing=true;
-            var isOpen = LoadAdUtils.instance.checkIsOpenTypeById(ad.adUnitId)||LoadAdUtils2.instance.checkIsOpenTypeById(ad.adUnitId);
-            _removeMaxAd(isOpen?AdType.open:AdType.inter);
+            _removeMaxAd(AdType.inter);
             AdNumUtils.instance.updateShowNum();
             _adShowListener?.showAdSuccess?.call(ad,_getMaxInfoById(ad.adUnitId));
           },
           onAdDisplayFailedCallback: (ad, error) {
             printDebug("FlutterMaxAd show ad fail---->${ad.adUnitId}---${error.message}");
-            var isOpen = LoadAdUtils.instance.checkIsOpenTypeById(ad.adUnitId)||LoadAdUtils2.instance.checkIsOpenTypeById(ad.adUnitId);
-            _removeMaxAd(isOpen?AdType.open:AdType.inter);
+            _removeMaxAd(AdType.inter);
             _adShowListener?.showAdFail?.call(ad,error);
           },
           onAdClickedCallback: (ad) {
@@ -171,8 +131,7 @@ class FlutterMaxAd {
           },
           onAdHiddenCallback: (ad) {
             _fullAdShowing=false;
-            var isOpen = LoadAdUtils.instance.checkIsOpenTypeById(ad.adUnitId)||LoadAdUtils2.instance.checkIsOpenTypeById(ad.adUnitId);
-            loadAdByType(isOpen?AdType.open:AdType.inter);
+            loadAdByType(AdType.inter);
             _adShowListener?.onAdHidden.call(ad);
           },
           onAdRevenuePaidCallback: (MaxAd ad){
@@ -238,25 +197,25 @@ class FlutterMaxAd {
             _adShowListener?.showAdFail?.call(null,null);
           }
           break;
-        case AdType.open:
-          if(resultBean.maxAdInfoBean.adType==AdType.open){
-            if(await AppLovinMAX.isAppOpenAdReady(resultBean.maxAd.adUnitId)==true){
-              AppLovinMAX.showAppOpenAd(resultBean.maxAd.adUnitId);
-            }else{
-              printDebug("FlutterMaxAd isRewardedAdReady=false");
-              _removeMaxAd(adType);
-              _adShowListener?.showAdFail?.call(null,null);
-            }
-          }else if(resultBean.maxAdInfoBean.adType==AdType.inter){
-            if(await AppLovinMAX.isInterstitialReady(resultBean.maxAd.adUnitId)==true){
-              AppLovinMAX.showInterstitial(resultBean.maxAd.adUnitId);
-            }else{
-              printDebug("FlutterMaxAd isRewardedAdReady=false");
-              _removeMaxAd(adType);
-              _adShowListener?.showAdFail?.call(null,null);
-            }
-          }
-          break;
+        // case AdType.open:
+        //   if(resultBean.maxAdInfoBean.adType==AdType.open){
+        //     if(await AppLovinMAX.isAppOpenAdReady(resultBean.maxAd.adUnitId)==true){
+        //       AppLovinMAX.showAppOpenAd(resultBean.maxAd.adUnitId);
+        //     }else{
+        //       printDebug("FlutterMaxAd isRewardedAdReady=false");
+        //       _removeMaxAd(adType);
+        //       _adShowListener?.showAdFail?.call(null,null);
+        //     }
+        //   }else if(resultBean.maxAdInfoBean.adType==AdType.inter){
+        //     if(await AppLovinMAX.isInterstitialReady(resultBean.maxAd.adUnitId)==true){
+        //       AppLovinMAX.showInterstitial(resultBean.maxAd.adUnitId);
+        //     }else{
+        //       printDebug("FlutterMaxAd isRewardedAdReady=false");
+        //       _removeMaxAd(adType);
+        //       _adShowListener?.showAdFail?.call(null,null);
+        //     }
+        //   }
+        //   break;
         default:
           _adShowListener?.showAdFail?.call(null,null);
           break;
