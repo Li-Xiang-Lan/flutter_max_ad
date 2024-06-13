@@ -107,16 +107,16 @@ class LoadAdUtils{
         _loadAdByType(info.adType, nextAdInfo);
       }else{
         _loadingList.remove(info.adType);
-        AdNumUtils.instance.addLoadFailNum(info.adLocationName);
-        if(AdNumUtils.instance.getLoadFailNum(info.adLocationName)<=2){
-          Future.delayed(const Duration(seconds: 10),(){
-            FlutterMaxAd.instance.loadAdByType(info.adType);
-          });
-        }else{
-          Future.delayed(const Duration(seconds: 30),(){
-            FlutterMaxAd.instance.loadAdByType(info.adType);
-          });
-        }
+        // AdNumUtils.instance.addLoadFailNum(info.adLocationName);
+        // if(AdNumUtils.instance.getLoadFailNum(info.adLocationName)<=2){
+        //   Future.delayed(const Duration(seconds: 10),(){
+        //     FlutterMaxAd.instance.loadAdByType(info.adType);
+        //   });
+        // }else{
+        //   Future.delayed(const Duration(seconds: 30),(){
+        //     FlutterMaxAd.instance.loadAdByType(info.adType);
+        //   });
+        // }
       }
     }
   }

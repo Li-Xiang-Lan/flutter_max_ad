@@ -260,14 +260,17 @@ class FlutterMaxAd {
   }
 
   dismissMaxAdView(){
-    _fullAdShowing=false;
-    _fromForceClose=true;
-    FlutterMaxAdPlatform.instance.dismissMaxAdView();
-    loadAdByType(AdType.inter);
-    loadAdByType(AdType.reward);
-    _adShowListener?.onAdHidden.call(null);
-    Future.delayed(const Duration(milliseconds: 1000),(){
-      _fromForceClose=false;
-    });
+    if(_fullAdShowing){
+      _fullAdShowing=false;
+      _fromForceClose=true;
+      FlutterMaxAdPlatform.instance.dismissMaxAdView();
+      FlutterMaxAdPlatform.instance.dismissMaxAdView();
+      loadAdByType(AdType.inter);
+      loadAdByType(AdType.reward);
+      _adShowListener?.onAdHidden.call(null);
+      Future.delayed(const Duration(milliseconds: 1000),(){
+        _fromForceClose=false;
+      });
+    }
   }
 }
