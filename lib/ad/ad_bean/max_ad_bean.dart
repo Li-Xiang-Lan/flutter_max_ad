@@ -4,8 +4,6 @@ import 'package:flutter_max_ad/ad/ad_type.dart';
 class MaxAdBean {
   int maxShowNum;
   int maxClickNum;
-  List<MaxAdInfoBean> firstOpenAdList;
-  List<MaxAdInfoBean> secondOpenAdList;
   List<MaxAdInfoBean> firstRewardedAdList;
   List<MaxAdInfoBean> secondRewardedAdList;
   List<MaxAdInfoBean> firstInterAdList;
@@ -13,8 +11,6 @@ class MaxAdBean {
   MaxAdBean({
     required this.maxShowNum,
     required this.maxClickNum,
-    required this.firstOpenAdList,
-    required this.secondOpenAdList,
     required this.firstRewardedAdList,
     required this.secondRewardedAdList,
     required this.firstInterAdList,
@@ -23,7 +19,7 @@ class MaxAdBean {
 
   @override
   String toString() {
-    return 'MaxAdBean{maxShowNum: $maxShowNum, maxClickNum: $maxClickNum, firstOpenAdList: $firstOpenAdList, secondOpenAdList: $secondOpenAdList, firstRewardedAdList: $firstRewardedAdList, secondRewardedAdList: $secondRewardedAdList, firstInterAdList: $firstInterAdList, secondInterAdList: $secondInterAdList}';
+    return 'MaxAdBean{maxShowNum: $maxShowNum, maxClickNum: $maxClickNum, firstRewardedAdList: $firstRewardedAdList, secondRewardedAdList: $secondRewardedAdList, firstInterAdList: $firstInterAdList, secondInterAdList: $secondInterAdList}';
   }
 }
 

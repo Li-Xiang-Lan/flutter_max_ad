@@ -14,6 +14,7 @@ class AdNumUtils{
     return _instance!;
   }
 
+  final Map<String,int> _loadFailNumMap={};
   var _todayAdShowNum=0,_todayAdClickNum=0,_maxShowNum=100,_maxClickNum=100;
 
   AdNumUtils._internal(){
@@ -58,4 +59,15 @@ class AdNumUtils{
     var dateTime = DateTime.now();
     return "${dateTime.year}-${dateTime.month}-${dateTime.day}";
   }
+
+  addLoadFailNum(String adLocationName){
+    var num = _loadFailNumMap[adLocationName]??0;
+    _loadFailNumMap[adLocationName]=num++;
+  }
+
+  resetLoadFailNum(String adLocationName){
+    _loadFailNumMap[adLocationName]=0;
+  }
+
+  int getLoadFailNum(String adLocationName)=>_loadFailNumMap[adLocationName]??0;
 }
