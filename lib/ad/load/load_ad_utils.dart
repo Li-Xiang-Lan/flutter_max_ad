@@ -104,8 +104,10 @@ class LoadAdUtils{
       printDebug("FlutterMaxAd --->${info.adType}--->$adUnitId--->${info.id} load fail");
       var nextAdInfo = _getNextAdInfoById(adUnitId);
       if(null!=nextAdInfo){
+        printDebug("FlutterMaxAd --->has next info--->${nextAdInfo.toString()}");
         _loadAdByType(info.adType, nextAdInfo);
       }else{
+        printDebug("FlutterMaxAd --->no next info");
         _loadingList.remove(info.adType);
         // AdNumUtils.instance.addLoadFailNum(info.adLocationName);
         // if(AdNumUtils.instance.getLoadFailNum(info.adLocationName)<=2){
