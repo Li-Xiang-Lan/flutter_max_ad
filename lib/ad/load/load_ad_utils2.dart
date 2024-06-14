@@ -153,11 +153,6 @@ class LoadAdUtils2{
   }
 
   removeAdByType(String? adUnitId){
-    for (var element in _resultMap.keys) {
-      if(_resultMap[element]?.maxAdInfoBean.id==adUnitId){
-        printDebug("FlutterMaxAd ---> 2 remove ad --->$adUnitId");
-      }
-    }
     _resultMap.removeWhere((key, value) => value.maxAdInfoBean.id==adUnitId);
   }
 
