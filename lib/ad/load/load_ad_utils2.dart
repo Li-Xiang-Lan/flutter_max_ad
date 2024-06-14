@@ -21,16 +21,16 @@ class LoadAdUtils2{
 
   loadAd(AdType adType){
     if(_loadingList.contains(adType)){
-      printDebug("FlutterMaxAd --->$adType is loading");
+      printDebug("FlutterMaxAd --->$adType is loading  2");
       return;
     }
     if(checkHasCache(adType)){
-      printDebug("FlutterMaxAd --->$adType has cache");
+      printDebug("FlutterMaxAd --->$adType has cache  2");
       return;
     }
     var list = _getAdListByType(adType);
     if(list.isEmpty){
-      printDebug("FlutterMaxAd --->$adType list is empty");
+      printDebug("FlutterMaxAd --->$adType list is empty  2");
       return;
     }
     _loadingList.add(adType);
@@ -38,7 +38,7 @@ class LoadAdUtils2{
   }
 
   _loadAdByType(AdType adType,MaxAdInfoBean bean){
-    printDebug("FlutterMaxAd --->start load $adType ad,data=${bean.toString()}");
+    printDebug("FlutterMaxAd --->start load $adType ad, 2  data=${bean.toString()}");
     switch(adType){
       // case AdType.open:
       //   if(bean.adType==AdType.open){
@@ -92,7 +92,7 @@ class LoadAdUtils2{
     var info = getAdInfoById(ad.adUnitId);
     if(null!=info){
       // var adType = checkIsOpenTypeById(ad.adUnitId)?AdType.open:info.adType;
-      printDebug("FlutterMaxAd --->${info.adType}--->${ad.adUnitId}--->${info.id} load success");
+      printDebug("FlutterMaxAd ---> 2  ${info.adType}--->${ad.adUnitId}--->${info.id} load success");
       _loadingList.remove(info.adType);
       _resultMap[info.adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
       AdNumUtils.instance.resetLoadFailNum(info.adLocationName);
@@ -103,7 +103,7 @@ class LoadAdUtils2{
     var info = getAdInfoById(adUnitId);
     if(null!=info){
       // var adType = checkIsOpenTypeById(adUnitId)?AdType.open:info.adType;
-      printDebug("FlutterMaxAd --->${info.adType}--->$adUnitId--->${info.id} load fail");
+      printDebug("FlutterMaxAd ---> 2  ${info.adType}--->$adUnitId--->${info.id} load fail");
       var nextAdInfo = _getNextAdInfoById(adUnitId);
       if(null!=nextAdInfo){
         _loadAdByType(info.adType, nextAdInfo);
