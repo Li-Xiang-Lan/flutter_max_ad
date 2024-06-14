@@ -95,7 +95,7 @@ class LoadAdUtils2{
       printDebug("FlutterMaxAd ---> 2  ${info.adType}--->${ad.adUnitId}--->${info.id} load success");
       _loadingList.remove(info.adType);
       _resultMap[info.adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
-      AdNumUtils.instance.resetLoadFailNum(info.adLocationName);
+      // AdNumUtils.instance.resetLoadFailNum(info.adLocationName);
     }
   }
 
@@ -106,9 +106,12 @@ class LoadAdUtils2{
       printDebug("FlutterMaxAd ---> 2  ${info.adType}--->$adUnitId--->${info.id} load fail");
       var nextAdInfo = _getNextAdInfoById(adUnitId);
       if(null!=nextAdInfo){
+        printDebug("FlutterMaxAd ---> 2  has next info--->${nextAdInfo.toString()}");
         _loadAdByType(info.adType, nextAdInfo);
       }else{
+        printDebug("FlutterMaxAd ---> 2 no next info");
         _loadingList.remove(info.adType);
+        loadAd(info.adType);
         // AdNumUtils.instance.addLoadFailNum(info.adLocationName);
         // if(AdNumUtils.instance.getLoadFailNum(info.adLocationName)<=2){
         //   Future.delayed(const Duration(seconds: 10),(){

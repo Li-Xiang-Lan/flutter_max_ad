@@ -60,14 +60,14 @@ class AdNumUtils{
     return "${dateTime.year}-${dateTime.month}-${dateTime.day}";
   }
 
-  addLoadFailNum(String adLocationName){
-    var num = _loadFailNumMap[adLocationName]??0;
-    _loadFailNumMap[adLocationName]=num++;
-  }
-
-  resetLoadFailNum(String adLocationName){
-    _loadFailNumMap[adLocationName]=0;
-  }
-
-  int getLoadFailNum(String adLocationName)=>_loadFailNumMap[adLocationName]??0;
+  // addLoadFailNum(String adLocationName){
+  //   var num = _loadFailNumMap[adLocationName]??0;
+  //   _loadFailNumMap[adLocationName]=num++;
+  // }
+  //
+  // resetLoadFailNum(String adLocationName){
+  //   _loadFailNumMap[adLocationName]=0;
+  // }
+  //
+  // int getLoadFailNum(String adLocationName)=>_loadFailNumMap[adLocationName]??0;
 }

@@ -18,7 +18,7 @@ class FlutterMaxAd {
 
   static FlutterMaxAd get instance => _instance;
 
-  var _maxInit=false,_fullAdShowing=false,_fromForceClose=false;
+  var _maxInit=false,_fullAdShowing=false;
   AdShowListener? _adShowListener;
   LoadAdListener? _loadAdListener;
   final _facebookAppEvents = FacebookAppEvents();
@@ -91,11 +91,9 @@ class FlutterMaxAd {
             AdNumUtils.instance.updateClickNum();
           },
           onAdHiddenCallback: (MaxAd ad) {
-            if(!_fromForceClose){
-              _fullAdShowing=false;
-              loadAdByType(AdType.reward);
-              _adShowListener?.onAdHidden.call(ad);
-            }
+            _fullAdShowing=false;
+            loadAdByType(AdType.reward);
+            _adShowListener?.onAdHidden.call(ad);
           },
           onAdReceivedRewardCallback: (MaxAd ad, MaxReward reward) {
             _adShowListener?.onAdReceivedReward?.call(ad,reward);
@@ -132,11 +130,9 @@ class FlutterMaxAd {
             AdNumUtils.instance.updateClickNum();
           },
           onAdHiddenCallback: (ad) {
-            if(!_fromForceClose){
-              _fullAdShowing=false;
-              loadAdByType(AdType.inter);
-              _adShowListener?.onAdHidden.call(ad);
-            }
+            _fullAdShowing=false;
+            loadAdByType(AdType.inter);
+            _adShowListener?.onAdHidden.call(ad);
           },
           onAdRevenuePaidCallback: (MaxAd ad){
             _onAdRevenuePaidByAdjust(ad);
@@ -259,18 +255,18 @@ class FlutterMaxAd {
     }
   }
 
-  dismissMaxAdView(){
-    if(_fullAdShowing){
-      _fullAdShowing=false;
-      _fromForceClose=true;
-      FlutterMaxAdPlatform.instance.dismissMaxAdView();
-      FlutterMaxAdPlatform.instance.dismissMaxAdView();
-      loadAdByType(AdType.inter);
-      loadAdByType(AdType.reward);
-      _adShowListener?.onAdHidden.call(null);
-      Future.delayed(const Duration(milliseconds: 1000),(){
-        _fromForceClose=false;
-      });
-    }
-  }
+  // dismissMaxAdView(){
+  //   if(_fullAdShowing){
+  //     _fullAdShowing=false;
+  //     _fromForceClose=true;
+  //     FlutterMaxAdPlatform.instance.dismissMaxAdView();
+  //     FlutterMaxAdPlatform.instance.dismissMaxAdView();
+  //     loadAdByType(AdType.inter);
+  //     loadAdByType(AdType.reward);
+  //     _adShowListener?.onAdHidden.call(null);
+  //     Future.delayed(const Duration(milliseconds: 1000),(){
+  //       _fromForceClose=false;
+  //     });
+  //   }
+  // }
 }
