@@ -68,9 +68,9 @@ class LoadAdUtils{
   bool checkHasCache(AdType adType){
     var bean = _resultMap[adType];
     if(null!=bean?.maxAd){
-      var expired = DateTime.now().millisecondsSinceEpoch-(bean?.loadTime??0)>(bean?.maxAdInfoBean.expire??0)*1000;
+      var expired = DateTime.now().millisecondsSinceEpoch-(bean?.loadTime??0)>((bean?.maxAdInfoBean.expire??0)*1000);
       if(expired){
-        removeAdByType(adType);
+        removeAdByType(bean?.maxAdInfoBean.id);
         return false;
       }else{
         return true;
@@ -147,8 +147,8 @@ class LoadAdUtils{
     return null;
   }
 
-  removeAdByType(AdType adType){
-    _resultMap.remove(adType);
+  removeAdByType(String? adUnitId){
+    _resultMap.removeWhere((key, value) => value.maxAdInfoBean.id==adUnitId);
   }
 
   printDebug(Object? object){
