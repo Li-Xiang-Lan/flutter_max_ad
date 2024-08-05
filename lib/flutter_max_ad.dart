@@ -55,10 +55,10 @@ class FlutterMaxAd {
       ATInitManger.setLogEnabled(logEnabled: kDebugMode);
       ATInitManger.initAnyThinkSDK(appidStr: topOnAppId, appidkeyStr: topOnAppKey);
       if(kDebugMode){
-        ATInitManger.integrationChecking();
-        if(null!=topOnTestDeviceId){
-          ATInitManger.setDebuggerConfig(topOnTestDeviceId);
-        }
+        // ATInitManger.integrationChecking();
+        // if(null!=topOnTestDeviceId){
+        //   ATInitManger.setDebuggerConfig(topOnTestDeviceId);
+        // }
       }
       ATListenerManager.interstitialEventHandler.listen((event) {
         var adUnitId = event.placementID;
