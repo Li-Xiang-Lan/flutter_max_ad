@@ -1,6 +1,7 @@
 import 'package:adjust_sdk/adjust.dart';
 import 'package:adjust_sdk/adjust_ad_revenue.dart';
 import 'package:adjust_sdk/adjust_config.dart';
+import 'package:anythink_sdk/at_index.dart';
 import 'package:applovin_max/applovin_max.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/foundation.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_max_ad/ad/ad_type.dart';
 import 'package:flutter_max_ad/ad/listener/load_ad_listener.dart';
 import 'package:flutter_max_ad/ad/load/load_ad_utils.dart';
 import 'package:flutter_max_ad/ad/load/load_ad_utils2.dart';
-import 'package:flutter_max_ad/flutter_max_ad_platform_interface.dart';
+
 
 class FlutterMaxAd {
   static final FlutterMaxAd _instance = FlutterMaxAd();
@@ -25,23 +26,141 @@ class FlutterMaxAd {
 
   initMax({
     required String maxKey,
+    required String topOnAppId,
+    required String topOnAppKey,
     required MaxAdBean maxAdBean,
-    List? testDeviceAdvertisingIds,
-    bool? showMediationDebugger,
+    List? maxTestDeviceIds,  //android->gaid   ios->idfa
+    String? topOnTestDeviceId,  //android->gaid   ios->idfa
+    bool? maxOpenDebugger,
   })async{
     setMaxAdInfo(maxAdBean);
-    if(null!=testDeviceAdvertisingIds){
-      AppLovinMAX.setTestDeviceAdvertisingIds(testDeviceAdvertisingIds);
+    if(null!=maxTestDeviceIds){
+      AppLovinMAX.setTestDeviceAdvertisingIds(maxTestDeviceIds);
     }
+    _initTopOn(topOnAppId,topOnAppKey,topOnTestDeviceId);
     var maxConfiguration = await AppLovinMAX.initialize(maxKey);
     if(null!=maxConfiguration){
       _maxInit=true;
-      if(kDebugMode&&showMediationDebugger==true){
+      if(kDebugMode&&maxOpenDebugger==true){
         AppLovinMAX.showMediationDebugger();
       }
       _setAdListener();
       loadAdByType(AdType.reward);
       loadAdByType(AdType.inter);
+    }
+  }
+
+  _initTopOn(String topOnAppId,String topOnAppKey, String? topOnTestDeviceId){
+    try{
+      ATInitManger.setLogEnabled(logEnabled: kDebugMode);
+      ATInitManger.initAnyThinkSDK(appidStr: topOnAppId, appidkeyStr: topOnAppKey);
+      if(kDebugMode){
+        ATInitManger.integrationChecking();
+        if(null!=topOnTestDeviceId){
+          ATInitManger.setDebuggerConfig(topOnTestDeviceId);
+        }
+      }
+      ATListenerManager.interstitialEventHandler.listen((event) {
+        var adUnitId = event.placementID;
+        switch (event.interstatus) {
+        //广告加载失败
+          case InterstitialStatus.interstitialAdFailToLoadAD:
+            LoadAdUtils.instance.loadAdFail(adUnitId);
+            LoadAdUtils2.instance.loadAdFail(adUnitId);
+            break;
+        //广告加载成功
+          case InterstitialStatus.interstitialAdDidFinishLoading:
+            LoadAdUtils.instance.loadAdSuccess(adUnitId);
+            LoadAdUtils2.instance.loadAdSuccess(adUnitId);
+            _loadAdListener?.loadSuccess.call();
+            break;
+        //广告展示成功
+          case InterstitialStatus.interstitialDidShowSucceed:
+            printDebug("FlutterMaxAd show ad success---->$adUnitId");
+            _fullAdShowing=true;
+            _removeMaxAd(adUnitId);
+            AdNumUtils.instance.updateShowNum();
+            var maxAd = _createMaxAdByTopOnInfo(adUnitId,event.extraMap);
+            _adShowListener?.showAdSuccess?.call(maxAd,_getMaxInfoById(adUnitId));
+            if(null!=maxAd){
+              _onAdRevenuePaidByAdjust(maxAd);
+            }
+            break;
+        //广告展示失败
+          case InterstitialStatus.interstitialFailedToShow:
+            printDebug("FlutterMaxAd show ad fail---->$adUnitId---");
+            _fullAdShowing=false;
+            _removeMaxAd(adUnitId);
+            _adShowListener?.showAdFail?.call(_createMaxAdByTopOnInfo(adUnitId,event.extraMap),null);
+            loadAdByType(AdType.reward);
+            loadAdByType(AdType.inter);
+            break;
+        //广告被点击
+          case InterstitialStatus.interstitialAdDidClick:
+            AdNumUtils.instance.updateClickNum();
+            break;
+        //广告被关闭
+          case InterstitialStatus.interstitialAdDidClose:
+            _fullAdShowing=false;
+            loadAdByType(AdType.inter);
+            _adShowListener?.onAdHidden.call(_createMaxAdByTopOnInfo(adUnitId,event.extraMap));
+            break;
+          default:
+
+            break;
+        }
+      });
+      ATListenerManager.rewardedVideoEventHandler.listen((event) {
+        var adUnitId = event.placementID;
+        switch (event.rewardStatus) {
+        //广告加载失败
+          case RewardedStatus.rewardedVideoDidFailToLoad:
+            LoadAdUtils.instance.loadAdFail(adUnitId);
+            LoadAdUtils2.instance.loadAdFail(adUnitId);
+            break;
+        //广告加载成功
+          case RewardedStatus.rewardedVideoDidFinishLoading:
+            LoadAdUtils.instance.loadAdSuccess(adUnitId);
+            LoadAdUtils2.instance.loadAdSuccess(adUnitId);
+            _loadAdListener?.loadSuccess.call();
+            break;
+        //广告展示成功
+          case RewardedStatus.rewardedVideoDidStartPlaying:
+            printDebug("FlutterMaxAd show ad success---->$adUnitId");
+            _fullAdShowing=true;
+            _removeMaxAd(adUnitId);
+            AdNumUtils.instance.updateShowNum();
+            var maxAd = _createMaxAdByTopOnInfo(adUnitId,event.extraMap);
+            _adShowListener?.showAdSuccess?.call(maxAd,_getMaxInfoById(adUnitId));
+            if(null!=maxAd){
+              _onAdRevenuePaidByAdjust(maxAd);
+            }
+            break;
+        //广告展示失败
+          case RewardedStatus.rewardedVideoDidFailToPlay:
+            printDebug("FlutterMaxAd show ad fail---->$adUnitId---");
+            _fullAdShowing=false;
+            _removeMaxAd(adUnitId);
+            _adShowListener?.showAdFail?.call(_createMaxAdByTopOnInfo(adUnitId,event.extraMap),null);
+            loadAdByType(AdType.reward);
+            loadAdByType(AdType.inter);
+            break;
+        //广告被点击
+          case RewardedStatus.rewardedVideoDidClick:
+            AdNumUtils.instance.updateClickNum();
+            break;
+        //广告被关闭
+          case RewardedStatus.rewardedVideoDidClose:
+            _fullAdShowing=false;
+            loadAdByType(AdType.reward);
+            _adShowListener?.onAdHidden.call(_createMaxAdByTopOnInfo(adUnitId,event.extraMap));
+            break;
+          default:
+
+            break;
+        }
+      });
+    }catch(e){
     }
   }
 
@@ -66,8 +185,8 @@ class FlutterMaxAd {
     AppLovinMAX.setRewardedAdListener(
         RewardedAdListener(
           onAdLoadedCallback: (MaxAd ad) {
-            LoadAdUtils.instance.loadAdSuccess(ad);
-            LoadAdUtils2.instance.loadAdSuccess(ad);
+            LoadAdUtils.instance.loadAdSuccess(ad.adUnitId);
+            LoadAdUtils2.instance.loadAdSuccess(ad.adUnitId);
             _loadAdListener?.loadSuccess.call();
           },
           onAdLoadFailedCallback: (String adUnitId, MaxError error) {
@@ -108,8 +227,8 @@ class FlutterMaxAd {
     AppLovinMAX.setInterstitialListener(
         InterstitialListener(
           onAdLoadedCallback: (ad) {
-            LoadAdUtils.instance.loadAdSuccess(ad);
-            LoadAdUtils2.instance.loadAdSuccess(ad);
+            LoadAdUtils.instance.loadAdSuccess(ad.adUnitId);
+            LoadAdUtils2.instance.loadAdSuccess(ad.adUnitId);
             _loadAdListener?.loadSuccess.call();
           },
           onAdLoadFailedCallback: (adUnitId, error) {
@@ -182,25 +301,49 @@ class FlutterMaxAd {
       printDebug("FlutterMaxAd --->start show ad $adType");
       switch(adType){
         case AdType.reward:
-          if(await AppLovinMAX.isRewardedAdReady(resultBean.maxAd.adUnitId)==true){
-            AppLovinMAX.showRewardedAd(resultBean.maxAd.adUnitId);
-          }else{
-            printDebug("FlutterMaxAd isRewardedAdReady=false");
-            _removeMaxAd(resultBean.maxAdInfoBean.id);
-            _adShowListener?.showAdFail?.call(null,null);
-            loadAdByType(AdType.reward);
-            loadAdByType(AdType.inter);
+          if(resultBean.maxAdInfoBean.plat=="max"){
+            if(await AppLovinMAX.isRewardedAdReady(resultBean.maxAdInfoBean.id)==true){
+              AppLovinMAX.showRewardedAd(resultBean.maxAdInfoBean.id);
+            }else{
+              printDebug("FlutterMaxAd isRewardedAdReady=false");
+              _removeMaxAd(resultBean.maxAdInfoBean.id);
+              _adShowListener?.showAdFail?.call(null,null);
+              loadAdByType(AdType.reward);
+              loadAdByType(AdType.inter);
+            }
+          }else if(resultBean.maxAdInfoBean.plat=="topon"){
+            if(await ATRewardedManager.rewardedVideoReady(placementID: resultBean.maxAdInfoBean.id)==true){
+              ATRewardedManager.showRewardedVideo(placementID: resultBean.maxAdInfoBean.id);
+            }else{
+              printDebug("FlutterMaxAd reward ad ready=false");
+              _removeMaxAd(resultBean.maxAdInfoBean.id);
+              _adShowListener?.showAdFail?.call(null,null);
+              loadAdByType(AdType.reward);
+              loadAdByType(AdType.inter);
+            }
           }
           break;
         case AdType.inter:
-          if(await AppLovinMAX.isInterstitialReady(resultBean.maxAd.adUnitId)==true){
-            AppLovinMAX.showInterstitial(resultBean.maxAd.adUnitId);
-          }else{
-            printDebug("FlutterMaxAd isRewardedAdReady=false");
-            _removeMaxAd(resultBean.maxAdInfoBean.id);
-            _adShowListener?.showAdFail?.call(null,null);
-            loadAdByType(AdType.reward);
-            loadAdByType(AdType.inter);
+          if(resultBean.maxAdInfoBean.plat=="max"){
+            if(await AppLovinMAX.isInterstitialReady(resultBean.maxAdInfoBean.id)==true){
+              AppLovinMAX.showInterstitial(resultBean.maxAdInfoBean.id);
+            }else{
+              printDebug("FlutterMaxAd isRewardedAdReady=false");
+              _removeMaxAd(resultBean.maxAdInfoBean.id);
+              _adShowListener?.showAdFail?.call(null,null);
+              loadAdByType(AdType.reward);
+              loadAdByType(AdType.inter);
+            }
+          }else if(resultBean.maxAdInfoBean.plat=="topon"){
+            if(await ATInterstitialManager.hasInterstitialAdReady(placementID: resultBean.maxAdInfoBean.id)==true){
+              ATInterstitialManager.showInterstitialAd(placementID: resultBean.maxAdInfoBean.id);
+            }else{
+              printDebug("FlutterMaxAd inter ad ready=false");
+              _removeMaxAd(resultBean.maxAdInfoBean.id);
+              _adShowListener?.showAdFail?.call(null,null);
+              loadAdByType(AdType.reward);
+              loadAdByType(AdType.inter);
+            }
           }
           break;
         default:
@@ -219,7 +362,7 @@ class FlutterMaxAd {
 
   _onAdRevenuePaidByAdjust(MaxAd ad){
     var adjustAdRevenue = AdjustAdRevenue(AdjustConfig.AdRevenueSourceAppLovinMAX,);
-    adjustAdRevenue.setRevenue(ad.revenue, "USD");
+    adjustAdRevenue.setRevenue(ad.revenue, ad.dspName=="topon"?ad.creativeId:"USD");
     adjustAdRevenue.adRevenueNetwork=ad.networkName;
     adjustAdRevenue.adRevenueUnit=ad.adUnitId;
     adjustAdRevenue.adRevenuePlacement=ad.placement;
@@ -238,6 +381,14 @@ class FlutterMaxAd {
 
   startLoadAd(){
     _loadAdListener?.startLoad.call();
+  }
+
+  MaxAd? _createMaxAdByTopOnInfo(String adUnitId,Map extraMap){
+    try{
+      return MaxAd(adUnitId, extraMap["network_type"], extraMap["publisher_revenue"], extraMap["precision"], extraMap["currency"], "topon", "", MaxAdWaterfallInfo("", "", [], 0.0), null);
+    }catch(e){
+      return null;
+    }
   }
 
   printDebug(Object? object){

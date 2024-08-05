@@ -1,3 +1,4 @@
+import 'package:anythink_sdk/at_index.dart';
 import 'package:applovin_max/applovin_max.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_bean.dart';
@@ -53,11 +54,29 @@ class LoadAdUtils{
       //   break;
       case AdType.reward:
         FlutterMaxAd.instance.startLoadAd();
-        AppLovinMAX.loadRewardedAd(bean.id);
+        if(bean.plat=="max"){
+          AppLovinMAX.loadRewardedAd(bean.id);
+        }else if(bean.plat=="topon"){
+          ATRewardedManager.loadRewardedVideo(
+            placementID: bean.id,
+            extraMap: {
+              ATSplashManager.tolerateTimeout(): 20000
+            },
+          );
+        }
         break;
       case AdType.inter:
         FlutterMaxAd.instance.startLoadAd();
-        AppLovinMAX.loadInterstitial(bean.id);
+        if(bean.plat=="max"){
+          AppLovinMAX.loadInterstitial(bean.id);
+        }else if(bean.plat=="topon"){
+          ATInterstitialManager.loadInterstitialAd(
+              placementID: bean.id,
+              extraMap: {
+                ATSplashManager.tolerateTimeout(): 20000
+              },
+          );
+        }
         break;
       default:
 
@@ -67,10 +86,10 @@ class LoadAdUtils{
 
   bool checkHasCache(AdType adType){
     var bean = _resultMap[adType];
-    if(null!=bean?.maxAd){
-      var expired = DateTime.now().millisecondsSinceEpoch-(bean?.loadTime??0)>((bean?.maxAdInfoBean.expire??0)*1000);
+    if(null!=bean){
+      var expired = DateTime.now().millisecondsSinceEpoch-(bean.loadTime)>((bean.maxAdInfoBean.expire)*1000);
       if(expired){
-        removeAdByType(bean?.maxAdInfoBean.id);
+        removeAdByType(bean.maxAdInfoBean.id);
         return false;
       }else{
         return true;
@@ -88,12 +107,12 @@ class LoadAdUtils{
     }
   }
 
-  loadAdSuccess(MaxAd ad){
-    var info = getAdInfoById(ad.adUnitId);
+  loadAdSuccess(String adUnitId){
+    var info = getAdInfoById(adUnitId);
     if(null!=info){
-      printDebug("FlutterMaxAd --->${info.adType}--->${ad.adUnitId}--->${info.id} load success");
+      printDebug("FlutterMaxAd --->${info.adType}--->${adUnitId}--->${info.id} load success");
       _loadingList.remove(info.adType);
-      _resultMap[info.adType]=MaxAdResultBean(maxAd: ad, loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
+      _resultMap[info.adType]=MaxAdResultBean(loadTime: DateTime.now().millisecondsSinceEpoch, maxAdInfoBean: info);
       // AdNumUtils.instance.resetLoadFailNum(info.adLocationName);
     }
   }
@@ -109,17 +128,7 @@ class LoadAdUtils{
       }else{
         printDebug("FlutterMaxAd --->no next info");
         _loadingList.remove(info.adType);
-        loadAd(info.adType);
-        // AdNumUtils.instance.addLoadFailNum(info.adLocationName);
-        // if(AdNumUtils.instance.getLoadFailNum(info.adLocationName)<=2){
-        //   Future.delayed(const Duration(seconds: 10),(){
-        //     FlutterMaxAd.instance.loadAdByType(info.adType);
-        //   });
-        // }else{
-        //   Future.delayed(const Duration(seconds: 30),(){
-        //     FlutterMaxAd.instance.loadAdByType(info.adType);
-        //   });
-        // }
+        // loadAd(info.adType);
       }
     }
   }

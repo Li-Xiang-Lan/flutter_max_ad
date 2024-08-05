@@ -6,39 +6,18 @@ A new Flutter project.
 
 ### Set Proguard
 
-0.2.2+ is c38
+0.2.6 has topon
 
 #### Android
 
-Open your android->app->repositories, add content in this file
+Config max other platform 
 ```dart
-google()
-jcenter()
-mavenCentral()
-gradlePluginPortal()
-maven { url 'https://jitpack.io' }
-maven { url 'https://artifacts.applovin.com/android' }
-maven { url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" }
-maven { url "https://artifact.bytedance.com/repository/pangle" }
-maven { url "https://cboost.jfrog.io/artifactory/chartboost-ads/" }
-maven { url 'https://jfrog.anythinktech.com/artifactory/overseas_sdk' }
-maven { url "https://android-sdk.is.com" }
+https://developers.applovin.com/en/android/preparing-mediated-networks/
 ```
 
-Open your app->`build.gradle`, add content in this file
+Config topOn other platform
 ```dart
-implementation 'com.applovin.mediation:inmobi-adapter:10.1.4.3'
-implementation 'com.applovin.mediation:chartboost-adapter:9.4.1.0'
-implementation 'com.applovin.mediation:unityads-adapter:4.8.0.0'
-implementation 'com.applovin.mediation:vungle-adapter:6.12.1.1'
-implementation 'com.applovin.mediation:mintegral-adapter:16.5.11.0'
-implementation 'com.applovin.mediation:bytedance-adapter:5.4.1.0.0'
-implementation 'com.applovin.mediation:google-adapter:22.3.0.0'
-implementation 'com.applovin.mediation:google-ad-manager-adapter:22.3.0.0'
-implementation 'com.applovin.mediation:fyber-adapter:8.2.4.0'
-implementation 'com.applovin.mediation:ironsource-adapter:+'
-implementation 'com.applovin.mediation:facebook-adapter:6.16.0.0'
-implementation 'com.squareup.picasso:picasso:2.71828'
+https://app.toponad.com/m/sdk/download
 ```
 
 Open your AndroidManifest, add content in this file
