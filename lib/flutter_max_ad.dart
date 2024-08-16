@@ -55,12 +55,13 @@ class FlutterMaxAd {
       ATInitManger.setLogEnabled(logEnabled: kDebugMode);
       ATInitManger.initAnyThinkSDK(appidStr: topOnAppId, appidkeyStr: topOnAppKey);
       if(kDebugMode){
-        // ATInitManger.integrationChecking();
-        // if(null!=topOnTestDeviceId){
-        //   ATInitManger.setDebuggerConfig(topOnTestDeviceId);
-        // }
+        ATInitManger.integrationChecking();
+        if(null!=topOnTestDeviceId){
+          ATInitManger.setDebuggerConfig(topOnTestDeviceId);
+        }
       }
       ATListenerManager.interstitialEventHandler.listen((event) {
+        printDebug("kk=====${event.requestMessage}===${event.extraMap}");
         var adUnitId = event.placementID;
         switch (event.interstatus) {
         //广告加载失败
@@ -385,7 +386,7 @@ class FlutterMaxAd {
 
   MaxAd? _createMaxAdByTopOnInfo(String adUnitId,Map extraMap){
     try{
-      return MaxAd(adUnitId, extraMap["network_type"], extraMap["publisher_revenue"], extraMap["precision"], extraMap["currency"], "topon", "", MaxAdWaterfallInfo("", "", [], 0.0), null);
+      return MaxAd(adUnitId, extraMap["network_name"], extraMap["publisher_revenue"], extraMap["precision"], extraMap["currency"], "topon", "", MaxAdWaterfallInfo("", "", [], 0.0), null);
     }catch(e){
       return null;
     }
