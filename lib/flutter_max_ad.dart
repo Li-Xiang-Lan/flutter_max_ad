@@ -1,9 +1,11 @@
 import 'package:adjust_sdk/adjust.dart';
 import 'package:adjust_sdk/adjust_ad_revenue.dart';
 import 'package:adjust_sdk/adjust_config.dart';
+import 'package:adjust_sdk/adjust_event.dart';
 import 'package:anythink_sdk/at_index.dart';
 import 'package:applovin_max/applovin_max.dart';
 import 'package:facebook_app_events/facebook_app_events.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_bean.dart';
 import 'package:flutter_max_ad/ad/ad_num_utils.dart';
@@ -367,6 +369,10 @@ class FlutterMaxAd {
     adjustAdRevenue.adRevenueUnit=ad.adUnitId;
     adjustAdRevenue.adRevenuePlacement=ad.placement;
     Adjust.trackAdRevenueNew(adjustAdRevenue);
+    FirebaseAnalytics.instance.logBeginCheckout(
+        value: ad.revenue,
+        currency: ad.dspName=="topon"?ad.creativeId:"USD",
+    );
     _facebookAppEvents.logPurchase(amount: ad.revenue, currency: "USD");
     _adShowListener?.onAdRevenuePaidCallback?.call(ad);
   }
