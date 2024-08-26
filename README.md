@@ -6,7 +6,7 @@ A new Flutter project.
 
 ### Set Proguard
 
-0.2.2+ is c38
+0.3.0 no topon
 
 #### Android
 

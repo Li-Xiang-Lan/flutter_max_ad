@@ -218,13 +218,21 @@ class FlutterMaxAd {
   fullAdShowing()=>_fullAdShowing;
 
   _onAdRevenuePaidByAdjust(MaxAd ad){
-    var adjustAdRevenue = AdjustAdRevenue(AdjustConfig.AdRevenueSourceAppLovinMAX,);
-    adjustAdRevenue.setRevenue(ad.revenue, "USD");
-    adjustAdRevenue.adRevenueNetwork=ad.networkName;
-    adjustAdRevenue.adRevenueUnit=ad.adUnitId;
-    adjustAdRevenue.adRevenuePlacement=ad.placement;
-    Adjust.trackAdRevenueNew(adjustAdRevenue);
-    _facebookAppEvents.logPurchase(amount: ad.revenue, currency: "USD");
+    try{
+      var adjustAdRevenue = AdjustAdRevenue(AdjustConfig.AdRevenueSourceAppLovinMAX,);
+      adjustAdRevenue.setRevenue(ad.revenue, "USD");
+      adjustAdRevenue.adRevenueNetwork=ad.networkName;
+      adjustAdRevenue.adRevenueUnit=ad.adUnitId;
+      adjustAdRevenue.adRevenuePlacement=ad.placement;
+      Adjust.trackAdRevenueNew(adjustAdRevenue);
+    }catch(e){
+
+    }
+    try{
+      _facebookAppEvents.logPurchase(amount: ad.revenue, currency: "USD");
+    }catch(e){
+
+    }
     _adShowListener?.onAdRevenuePaidCallback?.call(ad);
   }
 
