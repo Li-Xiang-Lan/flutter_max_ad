@@ -369,10 +369,12 @@ class FlutterMaxAd {
     adjustAdRevenue.adRevenueUnit=ad.adUnitId;
     adjustAdRevenue.adRevenuePlacement=ad.placement;
     Adjust.trackAdRevenueNew(adjustAdRevenue);
-    FirebaseAnalytics.instance.logBeginCheckout(
+
+    FirebaseAnalytics.instance.logPurchase(
         value: ad.revenue,
         currency: ad.dspName=="topon"?ad.creativeId:"USD",
     );
+
     _facebookAppEvents.logPurchase(amount: ad.revenue, currency: "USD");
     _adShowListener?.onAdRevenuePaidCallback?.call(ad);
   }
