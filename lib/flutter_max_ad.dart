@@ -74,7 +74,7 @@ class FlutterMaxAd {
           case InterstitialStatus.interstitialAdDidFinishLoading:
             LoadAdUtils.instance.loadAdSuccess(adUnitId);
             LoadAdUtils2.instance.loadAdSuccess(adUnitId);
-            _loadAdListener?.loadSuccess.call();
+            _loadAdListener?.loadSuccess.call(_createMaxAdByTopOnInfo(adUnitId,event.extraMap),_getMaxInfoById(adUnitId));
             break;
         //广告展示成功
           case InterstitialStatus.interstitialDidShowSucceed:
@@ -124,7 +124,7 @@ class FlutterMaxAd {
           case RewardedStatus.rewardedVideoDidFinishLoading:
             LoadAdUtils.instance.loadAdSuccess(adUnitId);
             LoadAdUtils2.instance.loadAdSuccess(adUnitId);
-            _loadAdListener?.loadSuccess.call();
+            _loadAdListener?.loadSuccess.call(_createMaxAdByTopOnInfo(adUnitId,event.extraMap),_getMaxInfoById(adUnitId));
             break;
         //广告展示成功
           case RewardedStatus.rewardedVideoDidStartPlaying:
@@ -189,7 +189,7 @@ class FlutterMaxAd {
           onAdLoadedCallback: (MaxAd ad) {
             LoadAdUtils.instance.loadAdSuccess(ad.adUnitId);
             LoadAdUtils2.instance.loadAdSuccess(ad.adUnitId);
-            _loadAdListener?.loadSuccess.call();
+            _loadAdListener?.loadSuccess.call(ad,_getMaxInfoById(ad.adUnitId));
           },
           onAdLoadFailedCallback: (String adUnitId, MaxError error) {
             LoadAdUtils.instance.loadAdFail(adUnitId);
@@ -231,7 +231,7 @@ class FlutterMaxAd {
           onAdLoadedCallback: (ad) {
             LoadAdUtils.instance.loadAdSuccess(ad.adUnitId);
             LoadAdUtils2.instance.loadAdSuccess(ad.adUnitId);
-            _loadAdListener?.loadSuccess.call();
+            _loadAdListener?.loadSuccess.call(ad,_getMaxInfoById(ad.adUnitId));
           },
           onAdLoadFailedCallback: (adUnitId, error) {
             LoadAdUtils.instance.loadAdFail(adUnitId);
