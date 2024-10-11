@@ -31,7 +31,7 @@ class FlutterMaxAd {
     required String topOnAppId,
     required String topOnAppKey,
     required MaxAdBean maxAdBean,
-    List? maxTestDeviceIds,  //android->gaid   ios->idfa
+    List<String>? maxTestDeviceIds,  //android->gaid   ios->idfa
     String? topOnTestDeviceId,  //android->gaid   ios->idfa
     bool? maxOpenDebugger,
   })async{
