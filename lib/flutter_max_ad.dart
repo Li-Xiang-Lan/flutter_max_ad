@@ -26,7 +26,7 @@ class FlutterMaxAd {
   initMax({
     required String maxKey,
     required MaxAdBean maxAdBean,
-    List? testDeviceAdvertisingIds,
+    List<String>? testDeviceAdvertisingIds,
     bool? showMediationDebugger,
   })async{
     setMaxAdInfo(maxAdBean);

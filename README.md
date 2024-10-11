@@ -6,7 +6,7 @@ A new Flutter project.
 
 ### Set Proguard
 
-0.3.0 no topon
+0.3.4 no topon
 
 #### Android
 
