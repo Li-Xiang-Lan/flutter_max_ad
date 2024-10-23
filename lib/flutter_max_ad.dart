@@ -2,7 +2,6 @@ import 'package:adjust_sdk/adjust.dart';
 import 'package:adjust_sdk/adjust_ad_revenue.dart';
 import 'package:adjust_sdk/adjust_config.dart';
 import 'package:applovin_max/applovin_max.dart';
-import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_bean.dart';
 import 'package:flutter_max_ad/ad/ad_num_utils.dart';
@@ -11,7 +10,6 @@ import 'package:flutter_max_ad/ad/ad_type.dart';
 import 'package:flutter_max_ad/ad/listener/load_ad_listener.dart';
 import 'package:flutter_max_ad/ad/load/load_ad_utils.dart';
 import 'package:flutter_max_ad/ad/load/load_ad_utils2.dart';
-import 'package:flutter_max_ad/flutter_max_ad_platform_interface.dart';
 
 class FlutterMaxAd {
   static final FlutterMaxAd _instance = FlutterMaxAd();
@@ -21,7 +19,6 @@ class FlutterMaxAd {
   var _maxInit=false,_fullAdShowing=false;
   AdShowListener? _adShowListener;
   LoadAdListener? _loadAdListener;
-  final _facebookAppEvents = FacebookAppEvents();
 
   initMax({
     required String maxKey,
@@ -225,11 +222,6 @@ class FlutterMaxAd {
       adjustAdRevenue.adRevenueUnit=ad.adUnitId;
       adjustAdRevenue.adRevenuePlacement=ad.placement;
       Adjust.trackAdRevenueNew(adjustAdRevenue);
-    }catch(e){
-
-    }
-    try{
-      _facebookAppEvents.logPurchase(amount: ad.revenue, currency: "USD");
     }catch(e){
 
     }
