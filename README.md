@@ -6,9 +6,19 @@ A new Flutter project.
 
 ### Set Proguard
 
-0.3.4 no topon
+0.3.5 no topon  0.3.3 has topon
 
 #### Android
+
+Config max other platform
+```dart
+https://developers.applovin.com/en/android/preparing-mediated-networks/
+```
+
+Config topOn other platform
+```dart
+https://app.toponad.com/m/sdk/download
+```
 
 Open your android->app->repositories, add content in this file
 ```dart
