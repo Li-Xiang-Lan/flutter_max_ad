@@ -130,7 +130,7 @@ class LoadAdUtils2{
       }else{
         printDebug("FlutterMaxAd ---> 2 no next info");
         _loadingList.remove(info.adType);
-        // loadAd(info.adType);
+        loadAd(info.adType);
       }
     }
   }

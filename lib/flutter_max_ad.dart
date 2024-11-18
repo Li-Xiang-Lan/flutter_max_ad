@@ -21,7 +21,7 @@ class FlutterMaxAd {
 
   static FlutterMaxAd get instance => _instance;
 
-  var _maxInit=false,_fullAdShowing=false;
+  var _maxInit=false,_fullAdShowing=false,_logFacebookPurchase=false;
   AdShowListener? _adShowListener;
   LoadAdListener? _loadAdListener;
   final _facebookAppEvents = FacebookAppEvents();
@@ -31,10 +31,12 @@ class FlutterMaxAd {
     required String topOnAppId,
     required String topOnAppKey,
     required MaxAdBean maxAdBean,
+    bool? logFacebookPurchase,
     List<String>? maxTestDeviceIds,  //android->gaid   ios->idfa
     String? topOnTestDeviceId,  //android->gaid   ios->idfa
     bool? maxOpenDebugger,
   })async{
+    _logFacebookPurchase=logFacebookPurchase??false;
     setMaxAdInfo(maxAdBean);
     if(null!=maxTestDeviceIds){
       AppLovinMAX.setTestDeviceAdvertisingIds(maxTestDeviceIds);
@@ -382,7 +384,9 @@ class FlutterMaxAd {
 
     }
     try{
-      _facebookAppEvents.logPurchase(amount: ad.revenue, currency: "USD");
+      if(_logFacebookPurchase){
+        _facebookAppEvents.logPurchase(amount: ad.revenue, currency: "USD");
+      }
     }catch(e){
 
     }
