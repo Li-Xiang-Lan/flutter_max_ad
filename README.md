@@ -6,11 +6,13 @@ A new Flutter project.
 
 ### Set Proguard
 
-0.3.0 no topon
+0.3.5 no topon
+0.3.9 has topon
+0.3.6 no topon no facebook
 
 #### Android
 
-Config max other platform 
+Config max other platform
 ```dart
 https://developers.applovin.com/en/android/preparing-mediated-networks/
 ```
@@ -23,14 +25,14 @@ https://app.toponad.com/m/sdk/download
 Open your AndroidManifest, add content in this file
 ```dart
   <uses-library
-     android:name="org.apache.http.legacy"
-     android:required="false" />
-  <meta-data
-     android:name="com.google.android.gms.ads.APPLICATION_ID"
-     android:value="ca-app-pub-3940256099942544~3347511713" />
-  <meta-data
-     android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-     android:value="true" />
+android:name="org.apache.http.legacy"
+android:required="false" />
+<meta-data
+android:name="com.google.android.gms.ads.APPLICATION_ID"
+android:value="ca-app-pub-3940256099942544~3347511713" />
+<meta-data
+android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+android:value="true" />
 ```
 
 #### iOS
