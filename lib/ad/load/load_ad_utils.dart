@@ -1,9 +1,7 @@
-import 'package:anythink_sdk/at_index.dart';
 import 'package:applovin_max/applovin_max.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_bean.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_result_bean.dart';
-import 'package:flutter_max_ad/ad/ad_num_utils.dart';
 import 'package:flutter_max_ad/ad/ad_type.dart';
 import 'package:flutter_max_ad/flutter_max_ad.dart';
 
@@ -56,26 +54,12 @@ class LoadAdUtils{
         FlutterMaxAd.instance.startLoadAd();
         if(bean.plat=="max"){
           AppLovinMAX.loadRewardedAd(bean.id);
-        }else if(bean.plat=="topon"){
-          ATRewardedManager.loadRewardedVideo(
-            placementID: bean.id,
-            extraMap: {
-              ATSplashManager.tolerateTimeout(): 20000
-            },
-          );
         }
         break;
       case AdType.inter:
         FlutterMaxAd.instance.startLoadAd();
         if(bean.plat=="max"){
           AppLovinMAX.loadInterstitial(bean.id);
-        }else if(bean.plat=="topon"){
-          ATInterstitialManager.loadInterstitialAd(
-              placementID: bean.id,
-              extraMap: {
-                ATSplashManager.tolerateTimeout(): 20000
-              },
-          );
         }
         break;
       default:
