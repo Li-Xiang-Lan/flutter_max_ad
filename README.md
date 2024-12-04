@@ -6,8 +6,8 @@ A new Flutter project.
 
 ### Set Proguard
 
-0.3.9 has topon
-0.4.0 no topon
+0.3.9 android has topon
+0.4.1 ios no topon no facebook
 
 #### Android
 

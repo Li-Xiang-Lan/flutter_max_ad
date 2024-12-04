@@ -1,9 +1,7 @@
 import 'package:adjust_sdk/adjust.dart';
 import 'package:adjust_sdk/adjust_ad_revenue.dart';
 import 'package:adjust_sdk/adjust_config.dart';
-import 'package:adjust_sdk/adjust_event.dart';
 import 'package:applovin_max/applovin_max.dart';
-import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_max_ad/ad/ad_bean/max_ad_bean.dart';
@@ -20,22 +18,16 @@ class FlutterMaxAd {
 
   static FlutterMaxAd get instance => _instance;
 
-  var _maxInit=false,_fullAdShowing=false,_logFacebookPurchase=false;
+  var _maxInit=false,_fullAdShowing=false;
   AdShowListener? _adShowListener;
   LoadAdListener? _loadAdListener;
-  final _facebookAppEvents = FacebookAppEvents();
 
   initMax({
     required String maxKey,
-    required String topOnAppId,
-    required String topOnAppKey,
     required MaxAdBean maxAdBean,
-    bool? logFacebookPurchase,
     List<String>? maxTestDeviceIds,  //android->gaid   ios->idfa
-    String? topOnTestDeviceId,  //android->gaid   ios->idfa
     bool? maxOpenDebugger,
   })async{
-    _logFacebookPurchase=logFacebookPurchase??false;
     setMaxAdInfo(maxAdBean);
     if(null!=maxTestDeviceIds){
       AppLovinMAX.setTestDeviceAdvertisingIds(maxTestDeviceIds);
@@ -240,13 +232,6 @@ class FlutterMaxAd {
         value: ad.revenue,
         currency: "USD",
       );
-    }catch(e){
-
-    }
-    try{
-      if(_logFacebookPurchase){
-        _facebookAppEvents.logPurchase(amount: ad.revenue, currency: "USD");
-      }
     }catch(e){
 
     }
